@@ -65,6 +65,23 @@ Model catalog: https://console.nace.ai/docs/drex/reference/models
 5. **Rewrite reality**. See the butterfly transition and two worlds.
 6. **Advance both worlds**. Compare actual state changes and subsequent decisions.
 
+## Character voices
+
+All four citizens have prerecorded synthetic dialogue in their assigned accents:
+
+| Citizen | Accent | Recorded voice |
+| --- | --- | --- |
+| Bob | British English | Daniel (`en-GB`) |
+| Alice | Irish English | Moira (`en-IE`) |
+| Kevin | Indian English | Rishi (`en-IN`) |
+| Mia | Australian English | Karen (`en-AU`) |
+
+Click a resident to hear their introduction or current action. **Hear neighbors** plays all four citizens in order; profiles also have individual replay buttons. After a day advances, the chosen timeline is narrated automatically if voices are enabled. In split view, each world has its own Hear neighbors control; one shared queue prevents overlapping voices and remembers the most recently selected world for the next day.
+
+The header voice button mutes speech and saves the preference. Stop dialogue cancels the current queue. Ordinary profile clicks respect mute; an explicit Hear/Replay click enables voices. Loading a saved game never starts audio by itself. Hidden tabs, scenario changes, and resets stop playback. If a browser blocks playback, the app asks for a deliberate Hear/Replay click. Speaking highlights follow actual audio playback, and captions remain available with sound off.
+
+The 40 local AAC clips cover each resident's introduction, eight actions, and a failed-action response. Captions and audio scripts share `src/characterDialogue.ts`; `public/audio/manifest.json` records exact scripts, accent/voice provenance, durations, and checksums. Playback needs no API key, speech service, or installed regional browser voices. These are fixed game lines, not generated Drex speech. Regeneration requires macOS with the listed voices: `node --import tsx scripts/generate-voices.ts`.
+
 ## Natural disasters and recovery
 
 Pick one scenario before the first round. Bob begins with eight rescued food supplies; the others need to find help. There are no injuries or deaths in this small social simulation.
