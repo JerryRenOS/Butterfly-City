@@ -89,3 +89,32 @@
 @media(max-width:360px){.topbar .brand{font-size:15px}.topbar .brand-butterfly{display:none}.top-actions{gap:5px}}
 .disaster-picker{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:360px){.disaster-picker button{padding:8px 5px;min-width:0}.disaster-picker button>span:first-child{display:none}.disaster-picker b{font-size:16px}}
+
+/* Scene feet are driven by distance-based locomotion, not CSS position tweens. */
+.painted-resident.animated-resident{transition:none;will-change:left,top}
+.animated-resident .painted-character{animation:none!important}
+.animated-resident .painted-name{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:4px;max-width:180px;z-index:2;pointer-events:none}
+.animated-resident .painted-name small{max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.animated-resident .painted-speech{left:50%;transform:translateX(-50%);bottom:calc(100% + 3px);animation:conversation-caption .18s ease both;z-index:3}
+.animated-character .character-body{position:absolute;left:-25%;bottom:-5%;width:150%;height:100%;transform:scale(var(--depth-scale));transform-origin:50% 95%;pointer-events:none}
+.character-pose{position:absolute;inset:0;background-image:var(--pose-sheet);background-size:400% 300%;background-position:var(--pose-x) var(--pose-y);background-repeat:no-repeat;transform-origin:50% 95%;filter:drop-shadow(1px 2px 1px #1c291d24)}
+.facing-left .character-pose,.facing-back-left .character-pose{scale:-1 1}
+.animated-character .character-ground{bottom:-1px;left:19%;right:19%;height:5px;opacity:.27;z-index:0;animation:none;transform:scale(var(--depth-scale))}
+.animated-character:not(.stride-active) .character-pose{animation:character-breath 3.7s ease-in-out infinite;animation-delay:var(--resident-delay)}
+.animated-character.gesture-talk .character-pose{animation:character-explain 1.7s ease-in-out infinite}
+.animated-character.gesture-listen .character-pose{animation:character-listen 2.8s ease-in-out infinite}
+.animated-character.gesture-give .character-pose,.animated-character.gesture-work .character-pose{animation:character-reach 2s ease-in-out infinite}
+.animated-character.gesture-concern .character-pose{animation:character-hesitate 3.8s ease-in-out infinite}
+.animated-character.gesture-turn .character-pose,.animated-character.stride-active .character-pose{animation:none}
+.animated-resident.is-speaking .character-pose{filter:drop-shadow(0 0 5px #f5dd9d50) drop-shadow(0 2px 2px #243a2944)}
+.animated-resident.is-listening .painted-name{border-color:#d6c997;color:#52624b}
+@keyframes character-breath{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.008)}}
+@keyframes character-explain{0%,100%{transform:rotate(-.5deg)}38%{transform:rotate(.9deg) scaleY(1.006)}67%{transform:rotate(.1deg)}}
+@keyframes character-listen{0%,25%,100%{transform:rotate(0)}38%{transform:rotate(1.1deg) scaleY(.994)}51%{transform:rotate(0)}65%{transform:rotate(.7deg)}}
+@keyframes character-reach{0%,100%{transform:rotate(-.6deg)}45%{transform:rotate(1deg) scaleY(.994)}}
+@keyframes character-hesitate{0%,100%{transform:rotate(0)}38%{transform:rotate(-.7deg)}65%{transform:rotate(.4deg)}}
+@keyframes conversation-caption{from{opacity:0}to{opacity:1}}
+@media(max-width:700px){.animated-resident .painted-name{padding:2px 4px;gap:3px;font-size:8px}.animated-resident .painted-name small{max-width:48px;font-size:5px}.animated-resident .painted-speech{max-width:120px}.animated-resident.is-listening .painted-name small{max-width:54px}}
+@media(prefers-reduced-motion:reduce){html:not([data-world-motion="on"]) .animated-character *{animation:none!important}}
+/* Civic controls remain clickable when a resident passes in front of a landmark. */
+.painted-town .landmark{z-index:9}
