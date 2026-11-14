@@ -1,0 +1,14 @@
+Tool: built-in image_gen
+Reference: public/art/citizens-painted.png
+transparent_background: true
+
+Use case: stylized-concept.
+Asset type: production game animation atlas, exact 4 columns by 3 rows on square 1536 x 1536 transparent canvas. Each portrait cell is 384 wide x 512 high.
+Input image: character identity and painterly style reference only, not an edit target. Preserve the specified person's exact face, hair, costume and warm detailed hand-painted Japanese animated film look with natural proportions.
+Primary request: Draw ONE specified character twelve times. A clean sprite sheet with exactly twelve separate full-body figures, one figure centered in each equal cell. Consistent height about 420 pixels, head top around 40 pixels and boot soles on y=460 within EVERY cell. Do not vary zoom. Transparent generous gutters. All art fits its own cell. Actual alpha transparency, no background colors, no floor, no cast shadows, no captions, no numbers, no borders.
+The poses are read left to right:
+TOP ROW: 1 front-view neutral standing; 2 three-quarter view facing screen RIGHT; 3 exact profile facing screen RIGHT neutral standing; 4 three-quarter BACK view, facing away and toward screen RIGHT, clearly see back of head and costume.
+MIDDLE ROW: four distinct frames of a WALK cycle toward screen RIGHT. 1 LEFT foot extended forwards touching ground, right leg extended backward, opposing arm swing; 2 LEFT planted leg straight under torso while bent RIGHT knee passes in front; 3 RIGHT foot extended forwards touching ground, LEFT leg extended backward, opposing arm swing REVERSED; 4 RIGHT planted leg under torso while bent LEFT knee passes in front. Genuine alternate legs and knees with visible step changes, stable head level and body scale, not standing poses. Both hands outside pockets while walking.
+BOTTOM ROW: 1 three-quarter RIGHT speaking with open mouth and one hand extended in a relaxed conversational gesture; 2 three-quarter RIGHT listening with subtle tilted head and relaxed arms; 3 profile RIGHT helping/working, leaning slightly forward and reaching both hands forward; 4 three-quarter RIGHT worried/defensive shrug, shoulders raised and palms up.
+Keep all faces, clothes, hair and anatomy consistent. Avoid chibi, 3D render, blank missing cells, extra figures, text, fake checkerboard, cropped boots or heads.
+Subject: BOB: the FIRST person at far left of the reference. Youthful fair-skinned red-haired man with friendly round eyes, brown flat cap, rust-red jacket over cream open-collar shirt, brown trousers, brown lace-up boots. His cap stays on in all poses.
