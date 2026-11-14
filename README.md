@@ -1,14 +1,18 @@
 # Butterfly City
 
-One decision. Two universes. A tiny interactive storybook civilization built with React, TypeScript, Vite, original SVG art, and a Node/Express Drex proxy.
+One decision. Two universes. A tiny interactive storybook civilization built with React, TypeScript, Vite, original painted art, and a Node/Express Drex proxy.
 
 ## Painted-world presentation
 
 The visual remake uses an original cinematic hand-painted village and four matching painted villagers. The local art is inspired by warm, detailed Japanese animated films, with natural proportions, subtle movement, sunlight, drifting motes, and gently animated butterflies. No image-generation service is called at runtime.
 
-Each new round now plays a short, cancellable visit → interaction → return sequence. Sharing draws citizens into the square; support and trading bring them toward neighbors; contributions and aid send them to civic stores. Successful effects drive resource tokens, pantry stock, treasury pulses, and market light. Empty or failed contributions never invent successful transfers. Civic trust/stability affect social spacing and the decorative garden. Smoke, moving light, foliage, and butterflies provide ambient movement.
+Each new round plays a short, cancellable visit → supply exchange → funded repair work → return sequence. Sharing draws citizens into the square; support and trading bring them toward neighbors; contributions and aid send them to civic stores. Successful effects drive resource tokens, pantry stock, treasury pulses, and market light. Empty or failed contributions never invent successful transfers. Civic trust/stability affect social spacing and the decorative garden. Smoke, moving light, foliage, and butterflies provide ambient movement.
 
 “Replay day” repeats only the presentation: no simulation mutation, resource spending, or extra Drex requests. Starting another round cancels the previous sequence cleanly. Reduced-motion preferences skip travel/effects. The painted illustrations themselves remain layered 2D art, animated through positions and poses rather than skeletal character animation.
+
+The landscape now animates the painted pixels themselves with a small WebGL renderer: overhead foliage, ivy, foreground flower beds, two fabric awnings, cloud texture, and passing light move independently while the stone buildings and square stay anchored. Wind is stronger during a disaster; a gentle breeze continues on recovery days without advancing the simulation. Rain, spiraling debris, flowing flood currents, floating debris, and blowing snow sit in separate visual layers.
+
+The header’s **Living scenery / Play scenery** control pauses or resumes the scene and saves that preference. OS reduced motion is respected by default; an explicit Play scenery click opts this app into movement. Hidden or offscreen canvases suspend work. Drawing is capped at 30 fps with a bounded resolution; unsupported WebGL retains the original image and CSS scenery effects.
 
 The public pantry selects an empty or stocked village painting. Trust, morale, and stability change atmospheric color; actual recorded transfers animate food and coins. Reaction poses and dialogue remain state-driven, while the generated character faces are fixed illustrations. Profiles opened in either branch show that branch's actual state.
 
@@ -20,7 +24,7 @@ Artwork was made with the built-in image-generation tool and saved in `public/ar
 - `village-empty.png` — 1671×941 matching empty-pantry variant. [Exact edit prompt](public/art/village-empty-prompt.txt).
 - `citizens-painted.png` — 1774×887 transparent four-character atlas. [Exact prompt](public/art/citizens-prompt.txt).
 
-Legacy saved choices are replayed under the civilization rules, with an explicit migration notice and old inference receipts cleared. Current civic snapshots persist unchanged through this visual remake.
+Saved worlds now use schema version 3. Older campaigns replay their recorded choices as a tornado recovery story, with an explicit migration notice, recalculated resources/outcomes, and old inference receipts cleared. Current disaster saves preserve their scenario, damage, history, and timelines. Reset to choose a different disaster.
 
 ## Run locally
 
@@ -43,9 +47,9 @@ cp .env.example .env
 
 Set `NACE_API_KEY` in `.env` to your Nace API key, then restart `npm run dev`. Do not put a key in a VITE-prefixed variable. `.env` is gitignored. The default model is `drex-v2.0`; change `NACE_MODEL` if your account requires another compatible model.
 
-A fresh game detects an available key and selects Live Mode. For an existing saved demo: reset the story, open **Powered by Drex**, and select **Live Drex** before dropping the pizza. Browser login to Nace is not an API key.
+A fresh game detects an available key and selects Live Mode. For an existing saved demo: reset the story, open **Powered by Drex**, and select **Live Drex** before responding to the disaster. Browser login to Nace is not an API key.
 
-Each citizen now chooses among eight actions using personal wealth, persistent traits, directional trust, recent actions, public resources, and recent civic history. Civic outcomes are deterministic classifications after the round, not extra Drex predictions.
+Each citizen now chooses among eight actions using the current disaster, damage, next-round weather and gathering forecast, personal wealth, persistent traits, directional trust, recent actions, public resources, and recent civic history. Civic outcomes are deterministic classifications after the round, not extra Drex predictions.
 
 One POST to `https://console.nace.ai/v1/systemone` batches four named `choice` questions with a shared world snapshot. The actual returned choices drive consequences. The inspector shows response model, measured latency, evaluated decision count, and selected-choice probabilities when returned. Live errors are recoverable and never silently fall back to demo.
 
@@ -55,23 +59,39 @@ Model catalog: https://console.nace.ai/docs/drex/reference/models
 ## A 60-second demo
 
 1. Click Bob and meet the opportunist. Close his profile.
-2. **Drop the last pizza**. Read the residents’ reactions and town journal.
+2. Choose **Tornado**, **Tsunami**, or **Snowstorm**, then **Respond to disaster**. Read the residents’ reactions and town journal.
 3. **Next day**. Watch the civic headline, public pantry, treasury, trust, morale, and stability evolve.
 4. **What if Bob chose differently?** Select another initial action.
 5. **Rewrite reality**. See the butterfly transition and two worlds.
 6. **Advance both worlds**. Compare actual state changes and subsequent decisions.
 
+## Natural disasters and recovery
+
+Pick one scenario before the first round. Bob begins with eight rescued food supplies; the others need to find help. There are no injuries or deaths in this small social simulation.
+
+| Scenario | Initial damage | Additional damage on days 1–3 | Gathering per person during active weather (after day 1) |
+| --- | --- | --- | --- |
+| Tornado | 56 | 18, 8, 0 | 1 |
+| Tsunami | 70 | 24, 12, 0 | 0.5 |
+| Snowstorm | 42 | 10, 16, 10 | 0.5 |
+
+The first round has no gathering. Weather reduces stability by `ceil(intensity / 6)` and adds damage, capped at 100. After the weather clears, damaged routes (50+ damage) allow only 1 food per person; reopening routes restores 2. Weather follows the same calendar in both timelines, while repair choices change each world's access.
+
+After dinner and emergency grants, every **successful cooperate** action can fund up to 1 public coin of repair. Each coin removes 8 damage; spending is capped by available treasury funds and remaining damage. Private donations transfer money; repairs consume it. A failed contribution or an empty treasury cannot repair anything. Damage does not heal merely because an animation plays.
+
+Tornado funnels and wind, coastal waves/floodwater, and snowfall/drifts are local SVG/CSS layers over the existing painted village. Active weather clears on schedule; remaining debris, flood depth, and snow cover track persistent damage. Citizens who actually fund repairs move to the corresponding work site. HUDs show remaining damage, next gathering, and the day's damage/repair/cost record. Journals retain all recorded consequences. Reduced-motion mode leaves static weather and state indicators.
+
 ## Counterfactual rules
 
 The exact pre-crisis snapshot and all four initial decisions are saved. Branching restores that snapshot twice and overrides **only Bob's initial action** in the alternate world. Both branches immediately receive one new independently evaluated decision round. Subsequent advances evaluate both branches separately, committing neither if either request fails.
 
-Rules are identical and deterministic. Food budgets are fixed before each round; received gifts cannot be spent again that round. Each following day gives everyone the same 2 food from foraging. Each person eats 1 food; a full meal gives +4 mood, hunger gives −12.
+Rules are identical and deterministic. Food budgets are fixed before each round; received gifts cannot be spent again that round. Gathering follows the selected disaster and the town’s recovery; the four residents within a world always receive equal amounts. Each person eats 1 food; a full meal gives +4 mood, hunger gives −12.
 
 - **Share:** give up to 3 private food equally to neighbors; recipients gain 6 mood and 14 trust; giver gains 5 mood, town gains 3 stability.
 - **Hoard:** keep supplies; each neighbor loses 9 trust toward the hoarder; +3 mood if supplied, −2 stability.
 - **Trade:** sell 1 food to the next resident for 1 coin if their reserved starting budget can pay. Both gain 7 mutual trust; seller gains 5 mood, town gains 2 stability.
 - **Influence:** give 1 food to the next resident; recipient gains 12 trust, other neighbors lose 4 trust; giver gains 7 mood.
-- **Cooperate:** contribute up to 2 food and 1 coin to public stores; a successful contribution adds 5 stability, 4 personal mood, and 6 trust from each neighbor.
+- **Cooperate / Supply & rebuild:** contribute up to 2 food and 1 coin to public stores; a successful contribution adds 5 stability, 4 personal mood, and 6 trust from each neighbor. It also organizes a repair crew, subject to actual public funding after emergency grants.
 - **Support:** give up to 2 food to the least-fed neighbors, splitting ties; recipients gain 10 mood and 12 trust; giver gains 5 mood, town gains 3 stability.
 - **Ask:** public aid fills private food toward 3 (dinner plus a two-food reserve). Supplies are fairly split between requesters; new pantry contributions are available immediately. Successful aid adds 6 mood and 1 stability.
 - **Suspicion:** lose 10 trust in each neighbor, and each loses 5 trust in the speaker; −3 personal mood, −4 stability.
@@ -82,7 +102,7 @@ The town starts with an empty public pantry and 4 treasury coins; everyone owns 
 
 Each day receives exactly one civic outcome, in priority order: **Food Panic** (3+ hungry), **Suspicion Wave** (2+ rumor-spreaders or trust below 30), **Divided Town** (competing hoarding/cooperation, trust below 45, or stability below 35), **Trade Boom** (2+ successful trades), **Community Aid Chain** (2+ successful aid actions), **Cooperative Village** (2+ successful cooperative acts and nobody hungry), otherwise **Uneasy Peace**. The headline explains the actual conditions.
 
-The divergence count compares 27 independent values: four private food, four private wealth, four mood, twelve directed trust, public food, treasury, and stability. Town averages are not double-counted. Ripple chains use recorded Bob effects, actual trust deltas, later observed cooperation counts, and civic outcomes. They do not invent motives or claim that every later choice was caused by a specific relationship change. This is a simulated counterfactual, not a real-world causal prediction.
+The divergence count compares 28 independent values: four private food, four private wealth, four mood, twelve directed trust, public food, treasury, stability, and village damage. Town averages are not double-counted. Ripple chains use recorded Bob effects, actual trust deltas, later observed cooperation counts, funded repairs, and civic outcomes. They do not invent motives or claim that every later choice was caused by a specific relationship change. This is a simulated counterfactual, not a real-world causal prediction.
 
 ## Validate and serve a production build
 
@@ -94,10 +114,10 @@ npm start
 
 After building, `npm start` serves the game and API at http://localhost:3001.
 
-`npm run test:render` verifies server-rendered initial and saved split scenes, character controls, the action bar, and expandable details. It is not a browser layout test.
+`npm run test:render` verifies server-rendered scenario choices, disaster scenery, initial and saved split scenes, character controls, the action bar, and expandable details. It is not a browser layout test.
 
 With the dev server running, `npm run test:smoke` checks the page, proxy, crisis, next day, two-branch civilization evolution, validation, and missing-key error behavior. If a key is configured, it also makes one real four-citizen Drex request and reports the returned model.
 
-The tests cover immutable deterministic rounds, one-action branching, food/wealth conservation, fair scarce public aid, treasury grants, reserved trade/cooperation budgets, all seven civic outcomes, successful-vs-failed cooperation, clamped effect records, save migration, and the documented eight-option Drex response shape. No real live response has been verified without an API key. Browser visual/interaction QA was unavailable in the build environment because the browser-control host was offline.
+The tests cover immutable deterministic rounds, one-action branching, food/wealth accounting, three distinct weather calendars, persistent damage, funded repairs, reopened routes, disaster save migration, fair scarce public aid, treasury grants, reserved trade/cooperation budgets, all seven civic outcomes, successful-vs-failed cooperation, clamped effect records, save migration, and the documented eight-option Drex response shape. No real live response has been verified without an API key. Scenery was verified in an isolated headless Chromium browser: clear-day canvas pixels change between frames, pause freezes them, reduced motion defaults to static, explicit Play resumes, and both split timelines render. Desktop/mobile viewport checks also cover the fixed controls and recovery HUD.
 
 Fonts load from Google Fonts with local serif/sans-serif fallbacks. The village and character illustrations are original generated local PNG assets; butterflies and transfer effects are SVG/CSS. No runtime image APIs, database, or external asset packs are required.
