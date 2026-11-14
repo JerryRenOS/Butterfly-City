@@ -19,6 +19,8 @@ try {
  assert.doesNotMatch(initial,/pizza/i);
  assert.match(initial,/painted-landscape/);
  assert.match(initial,/Meet Bob/);
+ assert.match(initial,/Mute character voices/);
+ assert.match(initial,/Hear all citizens in Your town/);
  assert.match(initial,/class="story-controls"/);
  assert.match(initial,/<details class="story-details"/);
  const before=initialWorld(),decisions=demoDecisions(before);
@@ -33,6 +35,8 @@ try {
  assert.equal((split.match(/aria-label="Meet Bob"/g)||[]).length,2);
  assert.match(split,/ripple-details/);
  assert.match(split,/public coins/);
+ assert.match(split,/Hear all citizens in Original timeline/);
+ assert.match(split,/Hear all citizens in Alternate timeline/);
  for(const type of disasterTypes){
   const w=initialWorld(type);
   Object.defineProperty(globalThis,'localStorage',{value:{getItem:()=>JSON.stringify({world:w,mode:'demo',receipts:[]})},configurable:true});
