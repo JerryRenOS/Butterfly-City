@@ -2,35 +2,39 @@ import { useEffect, useState, type CSSProperties } from 'react';
 import { CharacterPortrait } from './PaintedCharacter';
 import { scenePlan, locationEffects, civicPlaces } from './sceneDynamics';
 import { Butterfly } from './Butterfly';
+import { DisasterScene, DisasterBadge } from './DisasterScene';
+import { LivingLandscape } from './LivingLandscape';
+import { disasters, disasterConditions } from './disasters';
 import { characters, formatNumber, type World, type Id, type Action } from './engine';
 export {CharacterPortrait} from './PaintedCharacter';
 const dialogue:Record<Id,Record<Action,string>>={
- bob:{share:'All right. A slice for everyone.',hoard:'I found it, didn’t I?',trade:'A fair price, my friend.',influence:'Remember who helped you.',cooperate:'Let’s build something together.',support:'Here. You need this more.',ask:'Perhaps I could use a hand.',suspicion:'Something isn’t quite right.'},
+ bob:{share:'All right. Supplies for everyone.',hoard:'I rescued it, didn’t I?',trade:'A fair price, my friend.',influence:'Remember who helped you.',cooperate:'Let’s rebuild this place.',support:'Here. You need this more.',ask:'Perhaps I could use a hand.',suspicion:'Something isn’t quite right.'},
  alice:{share:'There is enough if we share.',hoard:'I have to save a little, too.',trade:'Something fair for both of us.',influence:'I hope you’ll remember this.',cooperate:'For everyone’s tomorrow.',support:'No one should go hungry.',ask:'Would you help me today?',suspicion:'I wish I knew who to trust.'},
  kevin:{share:'Trust is worth a little risk.',hoard:'Best to be prepared.',trade:'Let me check the numbers.',influence:'We should look out for each other.',cooperate:'Perhaps this could work.',support:'Here. Just in case.',ask:'I could use a little help.',suspicion:'I have a worrying theory…'},
  mia:{share:'An investment in our neighbors.',hoard:'Saving something for tomorrow.',trade:'A good day for a fair trade.',influence:'Let’s make an alliance.',cooperate:'A town is built together.',support:'We all need a hand sometimes.',ask:'A little help to get started.',suspicion:'These accounts don’t add up.'}
 };
 type Position={id:string;x:number;y:number};
 type Transfer={from:Position;to:Position;kind:'food'|'coin'};
-export function TownScene({world,onCharacter,compact=false}:{world:World;onCharacter?:(id:Id)=>void;compact?:boolean;accent?:string}){
+export function TownScene({world,onCharacter,compact=false,motionEnabled=true,motionPaused=false}:{world:World;onCharacter?:(id:Id)=>void;compact?:boolean;accent?:string;motionEnabled?:boolean;motionPaused?:boolean}){
  const [note,setNote]=useState<string|null>(null);
- const [phase,setPhase]=useState<'idle'|'walking'|'working'|'returning'>('idle');
+ const [phase,setPhase]=useState<'idle'|'walking'|'working'|'repairing'|'returning'>('idle');
  const [replay,setReplay]=useState(0);
  const [sceneTown,setSceneTown]=useState(world.town);
  useEffect(()=>{
+  setNote(null);
   if(!world.day){setSceneTown(world.town);setPhase('idle');return;}
-  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced=!motionEnabled;
   if(reduced){setSceneTown(world.town);setPhase('idle');return;}
   setPhase('walking');
-  const timers=[setTimeout(()=>{setPhase('working');setSceneTown(world.town)},1900),setTimeout(()=>setPhase('returning'),4900),setTimeout(()=>setPhase('idle'),6800)];
+  const timers=[setTimeout(()=>{setPhase('working');setSceneTown(world.town)},1900),setTimeout(()=>setPhase('repairing'),4200),setTimeout(()=>setPhase('returning'),6800),setTimeout(()=>setPhase('idle'),8700)];
   return()=>timers.forEach(clearTimeout);
- },[world,replay]);
+ },[world,replay,motionEnabled]);
  const reacting=phase==='working';
  const travelling=phase==='walking'||phase==='returning';
  const t=sceneTown;
  const atmosphere=t.trust<40||t.mood<40||t.stability<35?'tense':t.trust>=55&&t.mood>=55&&t.stability>=50?'warm':'calm';
  const plans=scenePlan(world),places=locationEffects(world);
- const positions=plans.map(plan=>({id:plan.id,...(phase==='walking'||phase==='working'?plan.destination:plan.origin)}));
+ const positions=plans.map(plan=>({id:plan.id,...(phase==='repairing'?plan.repairDestination||plan.destination:phase==='walking'||phase==='working'?plan.destination:plan.origin)}));
  const effects=world.history.at(-1)?.effects||[];
  const transfers=effects.flatMap<Transfer>(e=>{
   const actor=positions.find(p=>p.id===e.actor),target=positions.find(p=>p.id===e.target);
@@ -40,8 +44,11 @@ export function TownScene({world,onCharacter,compact=false}:{world:World;onChara
   if((e.kind==='ask'||e.kind==='treasury-aid')&&actor)return [{from:{id:'town',...(e.kind==='ask'?civicPlaces.pantry:civicPlaces.treasury)},to:actor,kind:e.kind==='ask'?'food':'coin'}];
   return [];
  });
- return <div className={`painted-town atmosphere-${atmosphere} ${compact?'compact':''} ${reacting?'round-reaction':''} phase-${phase}`}>
-  <img className="painted-landscape" src={t.food<1?"/art/village-empty.png":"/art/village-painted.png"} alt="A hand-painted hillside village with warm tiled roofs, a stone bakery, gardens and a sunlit square" draggable="false"/>
+ return <div className={`painted-town atmosphere-${atmosphere} disaster-${world.disaster.type} ${disasterConditions(world.disaster,world.day).intensity?'under-weather':''} ${compact?'compact':''} ${reacting?'round-reaction':''} phase-${phase}`}>
+  <LivingLandscape paused={motionPaused||!motionEnabled} reducedMotion={!motionEnabled} disaster={world.disaster} day={world.day} src={t.food<1?"/art/village-empty.png":"/art/village-painted.png"} alt={`A hand-painted village recovering from a ${disasters[world.disaster.type].name.toLowerCase()}`}/>
+  <DisasterScene disaster={world.disaster} day={world.day}/>
+  <DisasterBadge disaster={world.disaster} day={world.day}/>
+  {phase==='repairing'&&places.repairs.length>0&&<div className="repair-worksite" style={{left:`${civicPlaces.repairs[world.disaster.type].x}%`,top:`${civicPlaces.repairs[world.disaster.type].y}%`}}><span aria-hidden="true">⚒</span><b>Repair crews at work</b></div>}
   <div className="living-garden" aria-hidden="true">{Array.from({length:Math.min(12,Math.floor((t.trust+t.stability)/14))},(_,i)=><i key={i} style={{left:`${7+i*7.5}%`,'--plant':i} as CSSProperties}><span>✿</span></i>)}</div>
   <div className={`oven-glow ${places.market.length&&reacting?'market-active':''}`} aria-hidden="true"/>
   <div className="chimney-smoke" aria-hidden="true"><i/><i/><i/></div>
@@ -50,17 +57,17 @@ export function TownScene({world,onCharacter,compact=false}:{world:World;onChara
   <div className="landscape-light"/><div className="landscape-vignette"/>
   <div className="wind-motes" aria-hidden="true">{Array.from({length:9},(_,i)=><i key={i} style={{'--mote':i} as CSSProperties}/>)}</div>
   <div className="scene-butterfly butterfly-one" aria-hidden="true"><Butterfly/></div><div className="scene-butterfly butterfly-two" aria-hidden="true"><Butterfly/></div>
-  <div className="village-caption"><span>THE VILLAGE OF SMALL POSSIBILITIES</span><b>{t.outcome}</b></div><div className="scene-playback"><span>{phase==='walking'?'Neighbors are on the move…':phase==='working'?'Today’s choices are changing the village':phase==='returning'?'Returning home…':'A living village · click a resident or place'}</span>{world.day>0&&<button disabled={phase!=='idle'} onClick={()=>setReplay(n=>n+1)} aria-label="Replay today’s village interactions">↻ Replay day</button>}</div>
+  <div className="village-caption"><span>THE VILLAGE OF SMALL POSSIBILITIES</span><b>{t.outcome}</b></div><div className="scene-playback"><span>{phase==='walking'?'Neighbors are on the move…':phase==='working'?'Emergency supplies are changing hands':phase==='repairing'?places.repairs.length?'Neighbors are restoring the village':'No funded repair work today':phase==='returning'?'Returning home…':!motionEnabled?'Scenery paused · use Play scenery above':'Living scenery · click a resident or place'}</span>{world.day>0&&<button disabled={phase!=='idle'} onClick={()=>setReplay(n=>n+1)} aria-label="Replay today’s village interactions">↻ Replay day</button>}</div>
   <button className="landmark pantry-landmark" aria-label="Inspect the public pantry" onClick={()=>setNote(`The shared pantry holds ${formatNumber(t.food)} food. Citizens can contribute supplies or ask for aid.`)}><span>◒</span><small>{formatNumber(t.food)}<span> pantry</span></small></button>
-  <button className="landmark treasury-landmark" aria-label="Inspect the public treasury" onClick={()=>setNote(`The treasury holds ${formatNumber(t.wealth)} public coins. Its safety net helps hungry neighbors with little money.`)}><span>◇</span><small>{formatNumber(t.wealth)}<span> coins</span></small></button>
-  <button className="landmark bakery-landmark" aria-label="Read the bakery notice" onClick={()=>setNote(world.day?t.summary:'The ovens have gone quiet. Bob has found the last pizza. Four neighbors, eight slices, and a future waiting to unfold.')}><span>⌂</span><small>The bakery</small></button>
+  <button className="landmark treasury-landmark" aria-label="Inspect the public treasury" onClick={()=>setNote(`The treasury holds ${formatNumber(t.wealth)} public coins. Emergency grants come first; successful contributors then organize repairs, removing 8 damage per public coin spent.`)}><span>◇</span><small>{formatNumber(t.wealth)}<span> coins</span></small></button>
+  <button className="landmark bakery-landmark" aria-label="Read the relief station notice" onClick={()=>setNote(`${disasters[world.disaster.type].description} Damage: ${formatNumber(world.disaster.damage)}/100. Choose Supply & rebuild to contribute resources and organize funded repairs.`)}><span>⌂</span><small>Relief station</small></button>
   {note&&<div className="landmark-note" role="status"><p>{note}</p><button aria-label="Close village note" onClick={()=>setNote(null)}>×</button></div>}
   {positions.map(({id,x,y},i)=>{const p=world.people[id],action=world.lastDecisions?.[id];const failed=effects.some(e=>e.actor===id&&e.kind==='unfulfilled');const receiving=effects.some(e=>e.kind==='food-transfer'&&e.target===id);const expression=reacting?(failed?'thinking':receiving?'happy':action==='suspicion'?'angry':action==='hoard'?'thinking':action==='share'||action==='cooperate'||action==='support'?'happy':'idle'):p.mood<35?'thinking':'idle';return <button key={id} className={`painted-resident resident-${id} ${reacting&&action?`action-${action}`:''} ${travelling?'is-travelling':''}`} style={{left:`${x}%`,top:`${y}%`,'--resident-delay':`${i*-.8}s`} as CSSProperties} onClick={()=>onCharacter?.(id)} aria-label={`Meet ${characters[id].name}`}>
    {action&&!travelling&&<span className="painted-speech">{failed?'Perhaps another way…':dialogue[id][action]}</span>}
    <CharacterPortrait id={id} size={92} mood={p.mood} expression={travelling?'walking':expression}/>
-   <span className="painted-name">{characters[id].name}<small>{phase==='walking'?plans.find(plan=>plan.id===id)?.activity:p.food<1&&world.day>0?'Needs food':receiving&&reacting?'Received help':'↗'}</small></span>
+   <span className="painted-name">{characters[id].name}<small>{phase==='repairing'&&plans.find(plan=>plan.id===id)?.repairDestination?'Helping repair the village':phase==='walking'?plans.find(plan=>plan.id===id)?.activity:p.food<1&&world.day>0?'Needs food':receiving&&reacting?'Received help':'↗'}</small></span>
   </button>})}
-  {reacting&&<svg key={`${world.day}-${replay}`} className="painted-transfers" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">{transfers.map((tr,i)=>{const sx=tr.from.x*10,sy=tr.from.y*6-35,ex=tr.to.x*10,ey=tr.to.y*6-35;return <g key={i}>{tr.kind==='coin'?<circle r="6" fill="#e4c77e" stroke="#796039" strokeWidth="1.5"/>:<g><path d="M-8-5 8-5 0 10Z" fill="#e3bf76" stroke="#806347" strokeWidth="1.3"/><path d="M-8-5h16" stroke="#b87f4a" strokeWidth="3"/></g>}<animateMotion dur="2.1s" path={`M${sx},${sy} Q${(sx+ex)/2},${Math.min(sy,ey)-95} ${ex},${ey}`} fill="freeze"/><set attributeName="opacity" to="0" begin="2.1s"/></g>})}</svg>}
+  {reacting&&<svg key={`${world.day}-${replay}`} className="painted-transfers" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">{transfers.map((tr,i)=>{const sx=tr.from.x*10,sy=tr.from.y*6-35,ex=tr.to.x*10,ey=tr.to.y*6-35;return <g key={i}>{tr.kind==='coin'?<circle r="6" fill="#e4c77e" stroke="#796039" strokeWidth="1.5"/>:<g><rect x="-8" y="-6" width="16" height="12" rx="2" fill="#cfb785" stroke="#806347" strokeWidth="1.3"/><path d="M-8 0H8M0-6V6" stroke="#efe1b7" strokeWidth="2"/></g>}<animateMotion dur="2.1s" path={`M${sx},${sy} Q${(sx+ex)/2},${Math.min(sy,ey)-95} ${ex},${ey}`} fill="freeze"/><set attributeName="opacity" to="0" begin="2.1s"/></g>})}</svg>}
  </div>
 }
 export default TownScene;

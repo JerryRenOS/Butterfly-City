@@ -4,13 +4,19 @@ import { createServer as createHttpServer } from 'node:http';
 import { renderToString } from 'react-dom/server';
 import { createElement } from 'react';
 import { initialWorld, applyRound, demoDecisions } from '../src/engine.js';
+import { disasterTypes } from '../src/disasters.js';
 const transport=createHttpServer();
 Object.defineProperty(globalThis,'localStorage',{value:{getItem:()=>null},configurable:true});
 const server=await createServer({configFile:false,server:{middlewareMode:true,hmr:{server:transport},watch:null},appType:'custom'});
 try {
  const {default:App}=await server.ssrLoadModule('/src/App.tsx');
  const initial=renderToString(createElement(App));
- assert.match(initial,/The last pizza/);
+ assert.match(initial,/Respond to disaster/);
+ assert.match(initial,/Choose a natural disaster/);
+ assert.match(initial,/Tornado/);
+ assert.match(initial,/Tsunami/);
+ assert.match(initial,/Snowstorm/);
+ assert.doesNotMatch(initial,/pizza/i);
  assert.match(initial,/painted-landscape/);
  assert.match(initial,/Meet Bob/);
  assert.match(initial,/class="story-controls"/);
@@ -27,7 +33,25 @@ try {
  assert.equal((split.match(/aria-label="Meet Bob"/g)||[]).length,2);
  assert.match(split,/ripple-details/);
  assert.match(split,/public coins/);
- console.log('PASS: initial and saved split worlds render, all residents remain interactive, primary controls and expandable details are present.');
+ for(const type of disasterTypes){
+  const w=initialWorld(type);
+  Object.defineProperty(globalThis,'localStorage',{value:{getItem:()=>JSON.stringify({world:w,mode:'demo',receipts:[]})},configurable:true});
+  const page=renderToString(createElement(App));
+  assert.match(page,new RegExp(`weather-${type}`));
+  assert.match(page,/Remaining village damage/);
+  assert.match(page,/Respond to disaster/);
+  assert.doesNotMatch(page,/pizza/i);
+  const result=applyRound(w,demoDecisions(w));
+  Object.defineProperty(globalThis,'localStorage',{value:{getItem:()=>JSON.stringify({world:result,pivot:{before:w,decisions:demoDecisions(w)},branches:[result,applyRound(w,{...demoDecisions(w),bob:'cooperate'})],mode:'demo',receipts:[]})},configurable:true});
+  const branches=renderToString(createElement(App));
+  assert.equal((branches.match(new RegExp(`weather-${type}`, 'g'))||[]).length,2);
+  assert.match(branches,/coins spent/);
+  assert.doesNotMatch(branches,/Choose a natural disaster/);
+ }
+ const legacy={...session,world:{...world,schemaVersion:2},receipts:[{model:'old-receipt-should-be-cleared'}]};
+ Object.defineProperty(globalThis,'localStorage',{value:{getItem:()=>JSON.stringify(legacy)},configurable:true});
+ assert.match(renderToString(createElement(App)),/previous choices were replayed as a tornado recovery story/);
+ console.log('PASS: all three disaster scenes, initial controls, saved split worlds, damage HUD, migration notice, and resident interactions render.');
 } finally {
  delete (globalThis as unknown as Record<string,unknown>).localStorage;
  await server.close();
