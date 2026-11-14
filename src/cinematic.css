@@ -118,3 +118,15 @@
 @media(prefers-reduced-motion:reduce){html:not([data-world-motion="on"]) .animated-character *{animation:none!important}}
 /* Civic controls remain clickable when a resident passes in front of a landmark. */
 .painted-town .landmark{z-index:9}
+
+/* Procedural weather has a dense world plane and a restrained foreground veil. */
+.weather-renderer{position:absolute;inset:0;pointer-events:none}
+.weather-volume,.weather-foreground{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.weather-volume{z-index:2}.weather-foreground{z-index:8}
+.weather-renderer[data-renderer="canvas"]>.disaster-scenery{display:none}
+.disaster-snowstorm.under-weather .living-landscape-canvas,.disaster-snowstorm.under-weather .painted-landscape{filter:saturate(.48) brightness(.97)}
+.disaster-tsunami.under-weather .living-landscape-canvas,.disaster-tsunami.under-weather .painted-landscape{filter:saturate(.65) brightness(.76)}
+.disaster-tornado.under-weather .living-landscape-canvas,.disaster-tornado.under-weather .painted-landscape{filter:saturate(.55) brightness(.74)}
+.under-weather .village-caption{text-shadow:0 2px 7px #122a36,0 0 20px #122a3699}
+.disaster-snowstorm .living-garden{opacity:.12}.disaster-tsunami.under-weather .living-garden{opacity:.3}
+.disaster-tornado.under-weather .living-garden{opacity:.5}

@@ -105,7 +105,7 @@ export function TownScene({world,onCharacter,compact=false,motionEnabled=true,mo
  });
  return <div ref={sceneRef} data-speaker={spokenLine?.id} data-listener={partner} data-dialogue-status={spokenLine?.status} className={`painted-town atmosphere-${atmosphere} disaster-${world.disaster.type} ${disasterConditions(world.disaster,world.day).intensity?'under-weather':''} ${compact?'compact':''} ${reacting?'round-reaction':''} phase-${phase}`}>
   <LivingLandscape paused={motionPaused||!motionEnabled} reducedMotion={!motionEnabled} disaster={world.disaster} day={world.day} src={t.food<1?"/art/village-empty.png":"/art/village-painted.png"} alt={`A hand-painted village recovering from a ${disasters[world.disaster.type].name.toLowerCase()}`}/>
-  <DisasterScene disaster={world.disaster} day={world.day}/>
+  <DisasterScene disaster={world.disaster} day={world.day} paused={motionPaused||!motionEnabled} reducedMotion={!motionEnabled}/>
   <DisasterBadge disaster={world.disaster} day={world.day}/>
   {phase==='repair-work'&&!spokenLine&&allArrived&&places.repairs.length>0&&<div className="repair-worksite" style={{left:`${civicPlaces.repairs[world.disaster.type].x}%`,top:`${civicPlaces.repairs[world.disaster.type].y}%`}}><span aria-hidden="true">⚒</span><b>Repair crews at work</b></div>}
   <div className="living-garden" aria-hidden="true">{Array.from({length:Math.min(12,Math.floor((t.trust+t.stability)/14))},(_,i)=><i key={i} style={{left:`${7+i*7.5}%`,'--plant':i} as CSSProperties}><span>✿</span></i>)}</div>

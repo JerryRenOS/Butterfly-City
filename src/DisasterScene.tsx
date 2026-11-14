@@ -1,12 +1,13 @@
 import { useId, type CSSProperties } from 'react';
+import { WeatherCanvas } from './WeatherCanvas';
 import { disasters, disasterConditions, type DisasterState } from './disasters';
 
 /** Decorative weather follows the shared calendar; lingering damage follows actual repair state. */
-export function DisasterScene({ disaster, day }: { disaster: DisasterState; day: number }) {
+export function DisasterScene({ disaster, day, paused=false, reducedMotion=false }: { disaster: DisasterState; day: number; paused?: boolean; reducedMotion?: boolean }) {
   const funnelId = useId();
   const weather = disasterConditions(disaster, day);
   const active = weather.intensity > 0;
-  return <div className={`disaster-scenery weather-${disaster.type} ${active ? 'weather-active' : 'weather-clearing'}`} style={{ '--damage': disaster.damage / 100 } as CSSProperties} aria-hidden="true">
+  return <WeatherCanvas disaster={disaster} day={day} paused={paused} reducedMotion={reducedMotion}><div className={`disaster-scenery weather-${disaster.type} ${active ? 'weather-active' : 'weather-clearing'}`} style={{ '--damage': disaster.damage / 100 } as CSSProperties} aria-hidden="true">
     <div className="storm-clouds" />
     <div className="cloud-shadows"><i/><i/></div>
     <div className="passing-air">{Array.from({length:active?18:9},(_,i)=><i key={i} style={{'--air':i,top:`${22+i*19%70}%`} as CSSProperties}/>)}</div>
@@ -25,7 +26,7 @@ export function DisasterScene({ disaster, day }: { disaster: DisasterState; day:
       <div className="snow-drifts">{Array.from({ length: 6 }, (_, i) => <i key={i} style={{ left: `${8 + i * 16}%`, bottom: `${4 + i % 3 * 9}%`, scale: `${.4 + disaster.damage / 90}` }} />)}</div>
       {active && <div className="falling-snow">{Array.from({ length: 32 }, (_, i) => <i key={i} style={{ '--flake': i, left: `${i * 31 % 100}%`, top: `${i * 17 % 100}%` } as CSSProperties} />)}</div>}
     </>}
-  </div>;
+  </div></WeatherCanvas>;
 }
 
 export function DisasterBadge({ disaster, day }: { disaster: DisasterState; day: number }) {
