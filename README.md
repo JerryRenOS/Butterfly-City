@@ -42,6 +42,8 @@ Without a key the game starts in visibly labeled **Demo Mode**, with determinist
 
 ## Railway deployment
 
+Play: [Butterfly City](https://butterfly-city-production.up.railway.app). Manage the dedicated [Railway project](https://railway.com/project/15e55f2c-3f86-4a90-8dc2-693dd3d38656).
+
 The `develop` branch is the production deployment branch. `railway.json` pins the build, startup command, readiness check, and crash restart policy. Railway builds run the simulation tests, TypeScript check, Vite build, and rendering checks before release. GitHub Actions also exercises the built production server and branching API on pushes and pull requests.
 
 Use Node 22. Railway supplies `PORT`; the server listens on all interfaces. Set `NODE_ENV=production` in the service variables. The frontend and `/api` share one service and origin. Art and prerecorded neural speech ship with the build; deployment does not generate images or voices. No database or volume is required.
