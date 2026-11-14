@@ -1,11 +1,14 @@
 import { characters, ids, civicChain, formatNumber, type World, type Id } from './engine';
+import { disasterConditions, disasters } from './disasters';
 export function CivilizationHud({world,compact=false}:{world:World;compact?:boolean}){
  const t=world.town, last=world.history.at(-1)?.civic;
+ const weather=disasterConditions(world.disaster,world.day), recovery=world.history.at(-1)?.disaster;
  const tone=t.stability<35||t.trust<40||t.mood<40?'tense':t.trust>=55&&t.mood>=55&&t.stability>=50?'thriving':'uncertain';
  return <section className={`civilization-hud civic-${tone} ${compact?'compact-civic':''}`} aria-label={`Day ${world.day} civilization status`}>
  <div className="civic-heading"><span className="civic-seal" aria-hidden="true">{tone==='thriving'?'❀':tone==='tense'?'ϟ':'⚑'}</span><div><span className="eyebrow">{world.day?'TODAY’S CIVIC OUTCOME':'YOUR TINY CIVILIZATION'}</span><h2>{t.outcome}</h2></div><span className="stability-medal" title="Stability: 0 to 100">Order <b>{formatNumber(t.stability)}</b></span></div>
  <p className="civic-summary">{t.summary}</p>
  <div className="public-stats"><div><span>Public pantry</span><strong>◒ {formatNumber(t.food)}</strong><small>shared food</small></div><div><span>Town treasury</span><strong>◈ {formatNumber(t.wealth)}</strong><small>public coins</small></div><div><span>Social trust</span><strong>♥ {formatNumber(t.trust)}</strong><small>out of 100</small></div><div><span>Town morale</span><strong>☀ {formatNumber(t.mood)}</strong><small>out of 100</small></div></div>
+ <div className="recovery-status"><span>{disasters[world.disaster.type].symbol} Damage <b>{formatNumber(world.disaster.damage)}</b><meter min="0" max="100" value={world.disaster.damage} aria-label="Remaining village damage"/></span><span title={weather.access}>Next gathering <b>{formatNumber(weather.forage)}</b> / person</span>{recovery&&<small>Today: +{formatNumber(recovery.damageAdded)} damage · {formatNumber(recovery.repaired)} repaired · {formatNumber(recovery.repairCost)} coins spent</small>}</div>
  {last&&<div className="civic-footnote"><span>{last.cooperativeActions} successful cooperative actions</span><span>{last.hungry} hungry citizens</span><span>Order {last.stabilityDelta>=0?'+':''}{formatNumber(last.stabilityDelta)}</span></div>}
  {world.history.length>1&&<div className="civic-trajectory" aria-label="Recent civic history">{world.history.slice(-3).map(e=><span key={e.day}>D{e.day} · {e.civic.outcome}</span>)}</div>}
  </section>
