@@ -6,9 +6,9 @@ One decision. Two universes. A tiny interactive storybook civilization built wit
 
 The visual remake uses an original cinematic hand-painted village and four matching painted villagers. The local art is inspired by warm, detailed Japanese animated films, with natural proportions, subtle movement, sunlight, drifting motes, and gently animated butterflies. No image-generation service is called at runtime.
 
-Each new round plays a short, cancellable visit → supply exchange → funded repair work → return sequence. Sharing draws citizens into the square; support and trading bring them toward neighbors; contributions and aid send them to civic stores. Successful effects drive resource tokens, pantry stock, treasury pulses, and market light. Empty or failed contributions never invent successful transfers. Civic trust/stability affect social spacing and the decorative garden. Smoke, moving light, foliage, and butterflies provide ambient movement.
+Each new round plays a cancellable visit → supply exchange → funded repair work → return sequence. Activities wait for citizens to arrive; voiced conversations can briefly hold the sequence while a pair meets. Sharing draws citizens into the square; support and trading bring them toward neighbors; contributions and aid send them to civic stores. Successful effects drive resource tokens, pantry stock, treasury pulses, and market light. Empty or failed contributions never invent successful transfers. Civic trust/stability affect social spacing and the decorative garden. Smoke, moving light, foliage, and butterflies provide ambient movement.
 
-“Replay day” repeats only the presentation: no simulation mutation, resource spending, or extra Drex requests. Starting another round cancels the previous sequence cleanly. Reduced-motion preferences skip travel/effects. The painted illustrations themselves remain layered 2D art, animated through positions and poses rather than skeletal character animation.
+“Replay day” repeats only the presentation: no simulation mutation, resource spending, or extra Drex requests. Starting another round cancels the previous sequence cleanly. Reduced-motion preferences skip travel/effects. Characters turn before stepping, accelerate and brake, follow curved ground routes, and pass around neighbors with personal-space avoidance. Four alternating walk poses advance with distance traveled, so the gait stops when the feet stop. Ground depth controls scale and draw order. Talking, listening, giving, working, and worried poses add gestures and subtle posture changes. These are layered 2D sprite animations, not a 3D skeletal rig or phoneme lip sync.
 
 The landscape now animates the painted pixels themselves with a small WebGL renderer: overhead foliage, ivy, foreground flower beds, two fabric awnings, cloud texture, and passing light move independently while the stone buildings and square stay anchored. Wind is stronger during a disaster; a gentle breeze continues on recovery days without advancing the simulation. Rain, spiraling debris, flowing flood currents, floating debris, and blowing snow sit in separate visual layers.
 
@@ -22,7 +22,8 @@ Artwork was made with the built-in image-generation tool and saved in `public/ar
 
 - `village-painted.png` — 1672×941 stocked village. [Exact prompt](public/art/village-prompt.txt).
 - `village-empty.png` — 1671×941 matching empty-pantry variant. [Exact edit prompt](public/art/village-empty-prompt.txt).
-- `citizens-painted.png` — 1774×887 transparent four-character atlas. [Exact prompt](public/art/citizens-prompt.txt).
+- `citizens-painted.png` — 1774×887 transparent four-character atlas for portraits. [Exact prompt](public/art/citizens-prompt.txt).
+- `{bob,alice,kevin,mia}-animation.png` — four 1254×1254 transparent pose sheets, each a 4-column × 3-row grid: four orientations, four walking frames, and four social/work gestures. Matching `.prompt.txt` files record the generation prompts.
 
 Saved worlds now use schema version 3. Older campaigns replay their recorded choices as a tornado recovery story, with an explicit migration notice, recalculated resources/outcomes, and old inference receipts cleared. Current disaster saves preserve their scenario, damage, history, and timelines. Reset to choose a different disaster.
 
@@ -67,20 +68,31 @@ Model catalog: https://console.nace.ai/docs/drex/reference/models
 
 ## Character voices
 
-All four citizens have prerecorded synthetic dialogue in their assigned accents:
+All four citizens now use prerecorded neural speech in British or Indian English. Conversational scripts and restrained pacing changes replace the older operating-system voices:
 
 | Citizen | Accent | Recorded voice |
 | --- | --- | --- |
-| Bob | British English | Daniel (`en-GB`) |
-| Alice | Irish English | Moira (`en-IE`) |
-| Kevin | Indian English | Rishi (`en-IN`) |
-| Mia | Australian English | Karen (`en-AU`) |
+| Bob | British English | Ryan Neural (`en-GB`) |
+| Alice | British English | Sonia Neural (`en-GB`) |
+| Kevin | Indian English | Prabhat Neural (`en-IN`) |
+| Mia | Indian English | Neerja Neural (`en-IN`) |
 
-Click a resident to hear their introduction or current action. **Hear neighbors** plays all four citizens in order; profiles also have individual replay buttons. After a day advances, the chosen timeline is narrated automatically if voices are enabled. In split view, each world has its own Hear neighbors control; one shared queue prevents overlapping voices and remembers the most recently selected world for the next day.
+Click a resident to hear their introduction or current action. **Hear neighbors** plays four two-way exchanges, with each citizen followed by a neighbor’s reply; profiles also have individual replay buttons. After a day advances, the chosen timeline is narrated automatically if voices are enabled. In split view, each world has its own Hear neighbors control; one shared queue prevents overlapping voices and remembers the most recently selected world for the next day.
 
 The header voice button mutes speech and saves the preference. Stop dialogue cancels the current queue. Ordinary profile clicks respect mute; an explicit Hear/Replay click enables voices. Loading a saved game never starts audio by itself. Hidden tabs, scenario changes, and resets stop playback. If a browser blocks playback, the app asks for a deliberate Hear/Replay click. Speaking highlights follow actual audio playback, and captions remain available with sound off.
 
-The 40 local AAC clips cover each resident's introduction, eight actions, and a failed-action response. Captions and audio scripts share `src/characterDialogue.ts`; `public/audio/manifest.json` records exact scripts, accent/voice provenance, durations, and checksums. Playback needs no API key, speech service, or installed regional browser voices. These are fixed game lines, not generated Drex speech. Regeneration requires macOS with the listed voices: `node --import tsx scripts/generate-voices.ts`.
+The 60 local MP3 clips cover each resident's introduction, eight actions, a failed-action line, and five conversational replies. Successful transfers address an actual recipient; gratitude requires a recorded transfer, and failed actions receive a response that does not invent success. Both people approach stable meeting positions and face each other while bystanders step back to leave a clear view. Once the group has arrived, the scene releases that exact audio turn. The speaker gestures while the listener reacts; replies exchange their roles without swapping positions. Stopping, muting, or replacing a queue invalidates pending arrivals. Captions and audio scripts share `src/characterDialogue.ts`; `public/audio/manifest.json` records exact scripts, accent/voice provenance, durations, and checksums. Playback uses the bundled recordings, with no runtime speech service or regional browser voice dependency. These are fixed game lines, not generated Drex speech. The versioned `/audio/neural-v1/` paths prevent browsers from reusing the old voice recordings.
+
+Rendering uses Microsoft Edge online neural voices through the [edge-tts client](https://github.com/rany2/edge-tts); [Microsoft documents the voice locales](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts). This is a generation-time tool, not an Azure Speech API integration. The generator stages and validates the complete corpus before publishing it, keeps the MP3 output without a second lossy encode, and records exact voice, delivery settings, durations, and file hashes.
+
+To regenerate on macOS (Python 3, network access, and the built-in `afinfo`/`afconvert` tools):
+
+```sh
+python3 -m pip install --target /private/tmp/butterfly-neural-tts -r scripts/voice-requirements.txt
+PYTHONPATH=/private/tmp/butterfly-neural-tts node --import tsx scripts/generate-voices.ts
+```
+
+The client is pinned to `edge-tts==7.3.1`; the online voice models can evolve, so the saved recordings and checksums preserve this rendered version.
 
 ## Natural disasters and recovery
 
@@ -138,3 +150,5 @@ With the dev server running, `npm run test:smoke` checks the page, proxy, crisis
 The tests cover immutable deterministic rounds, one-action branching, food/wealth accounting, three distinct weather calendars, persistent damage, funded repairs, reopened routes, disaster save migration, fair scarce public aid, treasury grants, reserved trade/cooperation budgets, all seven civic outcomes, successful-vs-failed cooperation, clamped effect records, save migration, and the documented eight-option Drex response shape. No real live response has been verified without an API key. Scenery was verified in an isolated headless Chromium browser: clear-day canvas pixels change between frames, pause freezes them, reduced motion defaults to static, explicit Play resumes, and both split timelines render. Desktop/mobile viewport checks also cover the fixed controls and recovery HUD.
 
 Fonts load from Google Fonts with local serif/sans-serif fallbacks. The village and character illustrations are original generated local PNG assets; butterflies and transfer effects are SVG/CSS. No runtime image APIs, database, or external asset packs are required.
+
+Locomotion tests cover turn-before-step, distance-driven gait, bounded routes, collision avoidance, crowded destinations, retargeting, reciprocal facing, reduced motion, and immutable inputs. Browser checks verify eight sequential conversation turns with both participants arrived and facing before audio, one active voice, cancellation/mute, desktop and mobile split views, visible speakers, clickable civic controls, and arrival-gated repair work that returns everyone home.
