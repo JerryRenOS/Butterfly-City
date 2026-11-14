@@ -1,0 +1,23 @@
+.paper-person{overflow:visible;flex-shrink:0;isolation:isolate;vertical-align:middle;filter:drop-shadow(3px 4px 0 #fff4cc) drop-shadow(3px 5px 1px #2e332b30)}
+.person-cutout{transform-origin:75px 165px;animation:person-breathe 3.8s ease-in-out infinite}
+.person-head{transform-origin:75px 101px;animation:person-look 7s ease-in-out infinite}
+.person-arm{transform-box:fill-box;transform-origin:50% 10%}
+.person-eye{transform-box:fill-box;transform-origin:center;animation:person-blink 6s infinite}
+.person-alice .person-cutout{animation-delay:-1.1s}.person-kevin .person-head{animation-delay:-2s}.person-mia .person-cutout{animation-delay:-2.6s}.person-mia .arm-right{transform:rotate(-9deg)}
+.expression-happy .person-cutout{animation:person-hop .7s ease-in-out infinite}.expression-happy .arm-left{animation:person-wave .7s ease-in-out infinite}.expression-happy .arm-right{animation:person-wave .7s ease-in-out infinite reverse}
+.expression-shocked .person-cutout{animation:person-startle .65s ease-in-out 2}.expression-shocked .person-eye{animation:none}.expression-shocked .arm-left{transform:rotate(38deg)}.expression-shocked .arm-right{transform:rotate(-38deg)}
+.expression-angry .person-head{animation:person-grumble .32s ease-in-out 4}.expression-thinking .person-head{transform:rotate(-7deg);animation:none}.expression-thinking .arm-right{transform:rotate(-32deg)}
+.expression-walking .person-cutout{animation:person-step .48s ease-in-out infinite}.expression-walking .leg-left{transform-origin:60px 145px;animation:person-stride .48s ease-in-out infinite}.expression-walking .leg-right{transform-origin:93px 145px;animation:person-stride .48s ease-in-out infinite reverse}.expression-walking .arm-left{animation:person-wave .48s ease-in-out infinite}.expression-walking .arm-right{animation:person-wave .48s ease-in-out infinite reverse}
+.thought-motes{animation:thought-float 1.8s ease-in-out infinite}.surprise-lines{animation:surprise-flash .65s ease-in-out 2}
+@keyframes person-breathe{0%,100%{transform:translateY(0) rotate(-.7deg)}50%{transform:translateY(-2.5px) rotate(.7deg)}}
+@keyframes person-look{0%,35%,65%,100%{transform:rotate(0)}45%,55%{transform:rotate(3deg)}}
+@keyframes person-blink{0%,44%,48%,100%{transform:scaleY(1)}46%{transform:scaleY(.08)}}
+@keyframes person-hop{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-7px) rotate(2deg)}}
+@keyframes person-wave{0%,100%{transform:rotate(10deg)}50%{transform:rotate(-20deg)}}
+@keyframes person-startle{0%,100%{transform:translateY(0)}30%{transform:translateY(-10px) rotate(-4deg)}65%{transform:translateY(-5px) rotate(4deg)}}
+@keyframes person-grumble{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes person-step{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes person-stride{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+@keyframes thought-float{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(-3px);opacity:1}}
+@keyframes surprise-flash{0%,100%{opacity:.3}40%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.paper-person *{animation:none!important}}
