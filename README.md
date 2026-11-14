@@ -2,13 +2,21 @@
 
 One decision. Two universes. A tiny interactive storybook civilization built with React, TypeScript, Vite, original SVG art, and a Node/Express Drex proxy.
 
-## Civilization and game presentation
+## Painted-world presentation
 
-The village now uses four original humanoid paper adventurers with layered SVG faces, clothes, accessories, expressive poses, and idle/happy/shocked/angry/thinking/walking animation states. Larger buildings, a layered grass-and-earth platform, pantry, mushrooms, flags, butterflies, and interactive signs make the world feel alive.
+The visual remake uses an original cinematic hand-painted village and four matching painted villagers. The local art is inspired by warm, detailed Japanese animated films, with natural proportions, subtle movement, sunlight, drifting motes, and gently animated butterflies. No image-generation service is called at runtime.
 
-Recorded successful gifts trigger pizza transfers; action reactions settle back into state-driven expressions. Low trust, morale, or stability cools the atmosphere and separates residents; high trust and morale with stable institutions warms the scene and brightens flowers. Public food determines pantry contents; private hunger affects expressions. These presentation thresholds do not modify the simulation. Profiles opened in either branch show that branch's actual state.
+The public pantry selects an empty or stocked village painting. Trust, morale, and stability change atmospheric color; actual recorded transfers animate food and coins. Reaction poses and dialogue remain state-driven, while the generated character faces are fixed illustrations. Profiles opened in either branch show that branch's actual state.
 
-Rewriting reality adds a frozen-town transition, glowing original butterfly, rewind rings, light seam, and animated two-world reveal. Reduced-motion preferences disable decorative motion. Legacy saved choices are replayed under the new rules, with an explicit migration notice and old inference receipts cleared. New civic snapshots persist without replay.
+The primary action bar stays fixed at the bottom of the viewport. Desktop scene height adapts to viewport height; narrow screens stack the worlds. Secondary ripple explanations, character profiles, and journals use expandable sections. The timeline transition and reduced-motion preferences are preserved.
+
+Artwork was made with the built-in image-generation tool and saved in `public/art/`:
+
+- `village-painted.png` — 1672×941 stocked village. [Exact prompt](public/art/village-prompt.txt).
+- `village-empty.png` — 1671×941 matching empty-pantry variant. [Exact edit prompt](public/art/village-empty-prompt.txt).
+- `citizens-painted.png` — 1774×887 transparent four-character atlas. [Exact prompt](public/art/citizens-prompt.txt).
+
+Legacy saved choices are replayed under the civilization rules, with an explicit migration notice and old inference receipts cleared. Current civic snapshots persist unchanged through this visual remake.
 
 ## Run locally
 
@@ -82,8 +90,10 @@ npm start
 
 After building, `npm start` serves the game and API at http://localhost:3001.
 
+`npm run test:render` verifies server-rendered initial and saved split scenes, character controls, the action bar, and expandable details. It is not a browser layout test.
+
 With the dev server running, `npm run test:smoke` checks the page, proxy, crisis, next day, two-branch civilization evolution, validation, and missing-key error behavior. If a key is configured, it also makes one real four-citizen Drex request and reports the returned model.
 
 The tests cover immutable deterministic rounds, one-action branching, food/wealth conservation, fair scarce public aid, treasury grants, reserved trade/cooperation budgets, all seven civic outcomes, successful-vs-failed cooperation, clamped effect records, save migration, and the documented eight-option Drex response shape. No real live response has been verified without an API key. Browser visual/interaction QA was unavailable in the build environment because the browser-control host was offline.
 
-Fonts load from Google Fonts with local serif/sans-serif fallbacks. All village and character artwork is original inline SVG. No image APIs, database, or external asset packs are required.
+Fonts load from Google Fonts with local serif/sans-serif fallbacks. The village and character illustrations are original generated local PNG assets; butterflies and transfer effects are SVG/CSS. No runtime image APIs, database, or external asset packs are required.

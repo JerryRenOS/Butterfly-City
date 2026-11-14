@@ -6,6 +6,11 @@ async function decide(world:World,mode='demo'){
  return {status:response.status,body:await response.json()};
 }
 assert.equal((await fetch(base)).status,200);
+await Promise.all(['village-painted.png','village-empty.png','citizens-painted.png'].map(async file=>{
+ const response=await fetch(`${base}/art/${file}`);assert.equal(response.status,200);
+ assert.match(response.headers.get('content-type')||'',/image\/png/);
+ const bytes=new Uint8Array(await response.arrayBuffer());assert.deepEqual([...bytes.slice(0,8)],[137,80,78,71,13,10,26,10]);
+}));
 const status=await (await fetch(`${base}/api/status`)).json();
 const snapshot=initialWorld();
 const first=await decide(snapshot);assert.equal(first.status,200);assert.equal(first.body.source,'demo');
