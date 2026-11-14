@@ -82,5 +82,5 @@ app.use(express.static(resolve('dist')));
 app.use((req, res) => { if (req.path.startsWith('/api/')) res.status(404).json({ error: 'API route not found.' }); else res.sendFile(resolve('dist/index.html')); });
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const port = Number(process.env.PORT || 3001);
-  app.listen(port, '127.0.0.1', () => console.log(`Butterfly City API: http://localhost:${port} (${process.env.NACE_API_KEY ? 'Live Drex available' : 'Demo mode; set NACE_API_KEY for live decisions'})`));
+  app.listen(port, process.env.HOST || '0.0.0.0', () => console.log(`Butterfly City API: http://localhost:${port} (${process.env.NACE_API_KEY ? 'Live Drex available' : 'Demo mode; set NACE_API_KEY for live decisions'})`));
 }

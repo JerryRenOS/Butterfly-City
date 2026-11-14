@@ -1,0 +1,43 @@
+name: Validate production release
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run test:render
+      - name: Exercise production server
+        shell: bash
+        run: |
+          NODE_ENV=production PORT=3002 npm start > /tmp/butterfly-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=false
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3002/api/status; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then
+            cat /tmp/butterfly-server.log
+            exit 1
+          fi
+          SMOKE_URL=http://127.0.0.1:3002 npm run test:smoke

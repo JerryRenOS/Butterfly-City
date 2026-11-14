@@ -36,9 +36,19 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. Vite forwards `/api` to the backend on port 3001. The backend binds to loopback; API credentials never enter browser code.
+Open http://localhost:5173. Vite forwards `/api` to the backend on port 3001. The backend listens on `0.0.0.0` (override with `HOST`); API credentials never enter browser code.
 
 Without a key the game starts in visibly labeled **Demo Mode**, with deterministic personality-based choices. The game saves progress in localStorage. Use the top-right reset button to begin again.
+
+## Railway deployment
+
+The `develop` branch is the production deployment branch. `railway.json` pins the build, startup command, readiness check, and crash restart policy. Railway builds run the simulation tests, TypeScript check, Vite build, and rendering checks before release. GitHub Actions also exercises the built production server and branching API on pushes and pull requests.
+
+Use Node 22. Railway supplies `PORT`; the server listens on all interfaces. Set `NODE_ENV=production` in the service variables. The frontend and `/api` share one service and origin. Art and prerecorded neural speech ship with the build; deployment does not generate images or voices. No database or volume is required.
+
+Without `NACE_API_KEY`, the hosted release uses Demo Mode and Live requests return an explicit unavailable response. Keep any future key in Railway service variables, never frontend variables or Git. Before enabling paid Live inference for anonymous visitors, add access controls and request limits. Saves belong to each browser and origin, so localhost saves do not automatically appear on the public domain.
+
+After deploying, run `SMOKE_URL=https://YOUR-DOMAIN npm run test:smoke` to exercise all three disasters, independent timelines, API validation, and artwork delivery. This smoke test makes one real inference request if a Live key is configured. Railway's `/api/status` check gates each release; it is not continuous uptime monitoring. To roll back, redeploy a previous successful deployment in Railway and revert the source change before the next push.
 
 ## Enable real Drex decisions
 
