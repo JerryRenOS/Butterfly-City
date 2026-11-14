@@ -6,6 +6,10 @@ One decision. Two universes. A tiny interactive storybook civilization built wit
 
 The visual remake uses an original cinematic hand-painted village and four matching painted villagers. The local art is inspired by warm, detailed Japanese animated films, with natural proportions, subtle movement, sunlight, drifting motes, and gently animated butterflies. No image-generation service is called at runtime.
 
+Each new round now plays a short, cancellable visit → interaction → return sequence. Sharing draws citizens into the square; support and trading bring them toward neighbors; contributions and aid send them to civic stores. Successful effects drive resource tokens, pantry stock, treasury pulses, and market light. Empty or failed contributions never invent successful transfers. Civic trust/stability affect social spacing and the decorative garden. Smoke, moving light, foliage, and butterflies provide ambient movement.
+
+“Replay day” repeats only the presentation: no simulation mutation, resource spending, or extra Drex requests. Starting another round cancels the previous sequence cleanly. Reduced-motion preferences skip travel/effects. The painted illustrations themselves remain layered 2D art, animated through positions and poses rather than skeletal character animation.
+
 The public pantry selects an empty or stocked village painting. Trust, morale, and stability change atmospheric color; actual recorded transfers animate food and coins. Reaction poses and dialogue remain state-driven, while the generated character faces are fixed illustrations. Profiles opened in either branch show that branch's actual state.
 
 The primary action bar stays fixed at the bottom of the viewport. Desktop scene height adapts to viewport height; narrow screens stack the worlds. Secondary ripple explanations, character profiles, and journals use expandable sections. The timeline transition and reduced-motion preferences are preserved.
