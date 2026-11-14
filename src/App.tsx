@@ -5,7 +5,7 @@ import { CivilizationHud, CivicRipples, SocialMemory } from './Civilization';
 import { Butterfly } from './Butterfly';
 import { useWorldMotion } from './useWorldMotion';
 import { useCharacterSpeech } from './useCharacterSpeech';
-import { dialogueFor, roundDialogue, voiceProfiles } from './characterDialogue';
+import { dialogueFor, conversationDialogue, voiceProfiles } from './characterDialogue';
 import { disasters, disasterTypes, disasterConditions, type DisasterType } from './disasters';
 
 type Receipt = {decisions:Decisions; model:string; latencyMs:number; probabilities?:Record<string,Record<string,number>>;source:string;decisionsEvaluated:number};
@@ -46,7 +46,7 @@ export default function App(){
  }
  function narrate(w:World,branch:number|null){
   if(branch!==null)narratedBranch.current=branch as 0|1;
-  speech.speak(roundDialogue(w),branch===null?'Your town':branch===0?'Original timeline':'Alternate timeline',true);
+  speech.speak(conversationDialogue(w),branch===null?'Your town':branch===0?'Original timeline':'Alternate timeline',true);
  }
  async function run(){
   speech.stop();setBusy(branches?'Two futures are unfolding…':pivot?'A new day is unfolding…':'The village is responding…');setError('');
@@ -55,12 +55,12 @@ export default function App(){
     const result=await Promise.all(branches.map(decide));
     const next:[World,World]=[applyRound(branches[0],result[0].decisions),applyRound(branches[1],result[1].decisions)];
     commit({...session,branches:next,receipts:[...receipts,...result]});
-    speech.speak(roundDialogue(next[narratedBranch.current]),narratedBranch.current===0?'Original timeline':'Alternate timeline');
+    speech.speak(conversationDialogue(next[narratedBranch.current]),narratedBranch.current===0?'Original timeline':'Alternate timeline');
    }else{
     const [r]=await Promise.all([decide(world),new Promise(resolve=>setTimeout(resolve,pivot?250:1000))]);
     const next=applyRound(world,r.decisions);
     commit({...session,world:next,pivot:pivot||{before:structuredClone(world),decisions:structuredClone(r.decisions)},receipts:[...receipts,r]});
-    speech.speak(roundDialogue(next),'Your town');
+    speech.speak(conversationDialogue(next),'Your town');
    }
   }catch(e){setError(e instanceof Error?e.message:'Something went wrong. Please retry.')}finally{setBusy('')}
  }
@@ -72,7 +72,7 @@ export default function App(){
    const [result]=await Promise.all([Promise.all([decide(original),decide(alternate)]),new Promise(resolve=>setTimeout(resolve,2400))]);
    const next:[World,World]=[applyRound(original,result[0].decisions),applyRound(alternate,result[1].decisions)];
    setJustSplit(true);commit({...session,branches:next,receipts:[...receipts,...result]});narratedBranch.current=0;
-   speech.speak(roundDialogue(next[0]),'Original timeline');
+   speech.speak(conversationDialogue(next[0]),'Original timeline');
   }catch(e){setError(e instanceof Error?e.message:'Could not split the timelines. Try again.');setRewrite(true)}finally{setBusy('');setSplitting(false)}
  }
  const activeWorld=branches?.[0]||world;const scenario=disasters[activeWorld.disaster.type];const forecast=disasterConditions(activeWorld.disaster,activeWorld.day);const recent=activeWorld.lastDecisions;const profileWorld=selectedBranch!==null&&branches?branches[selectedBranch]:activeWorld;const profileScope=selectedBranch===null?(branches?'Original timeline':'Your town'):selectedBranch===0?'Original timeline':'Alternate timeline';
@@ -82,7 +82,7 @@ export default function App(){
   {!pivot&&<section className="disaster-picker" aria-label="Choose a natural disaster">{disasterTypes.map(type=><button key={type} aria-pressed={world.disaster.type===type} className={world.disaster.type===type?'selected':''} disabled={!!busy} onClick={()=>{speech.stop();commit({...fresh(type),mode});setError('')}}><span aria-hidden="true">{disasters[type].symbol}</span><span><b>{disasters[type].name}</b><small>{type==='tornado'?'Damaged roofs & blocked paths':type==='tsunami'?'Flooded streets & scarce food':'Deep snow & a longer storm'}</small></span></button>)}</section>}
   <section className={`world-stage ${branches?'is-split':''} ${splitting?'is-splitting':''} ${justSplit?'just-split':''}`} aria-label="Butterfly City village">
    <div className="stage-top"><span className="location"><span>✦</span> {branches?'PARALLEL WORLDS':'BUTTERFLY VALLEY'} <small>FOUR LIVES · INFINITE POSSIBILITIES</small></span><span className="day-pill">☀ <b>Day {activeWorld.day}</b><span> · </span>{scenario.name} · {forecast.phase}</span></div>
-   {branches?<div className="parallel-worlds">{branches.map((w,i)=><div className={`universe universe-${i}`} key={i}><div className="universe-heading"><span>{i===0?'01 / THE ORIGINAL':'02 / THE WHAT IF'}</span><b>Bob: {labels[w.history[0]?.decisions.bob]||'a different choice'}</b></div><TownScene world={w} motionEnabled={sceneryMotion.enabled} motionPaused={splitting} compact onCharacter={id=>meetCitizen(id,w,i)} voiceScope={i===0?'Original timeline':'Alternate timeline'} spokenLine={speech.current?.scope===(i===0?'Original timeline':'Alternate timeline')?speech.current:null} onNarrate={()=>narrate(w,i)} onStopSpeech={speech.stop} accent={i?'#b8a4e8':'#f6c267'}/><CivilizationHud world={w} compact/></div>)}</div>:<TownScene world={world} motionEnabled={sceneryMotion.enabled} motionPaused={splitting} onCharacter={id=>meetCitizen(id,world,null)} voiceScope="Your town" spokenLine={speech.current?.scope==='Your town'?speech.current:null} onNarrate={()=>narrate(world,null)} onStopSpeech={speech.stop}/>}
+   {branches?<div className="parallel-worlds">{branches.map((w,i)=><div className={`universe universe-${i}`} key={i}><div className="universe-heading"><span>{i===0?'01 / THE ORIGINAL':'02 / THE WHAT IF'}</span><b>Bob: {labels[w.history[0]?.decisions.bob]||'a different choice'}</b></div><TownScene world={w} motionEnabled={sceneryMotion.enabled} motionPaused={splitting} compact onCharacter={id=>meetCitizen(id,w,i)} voiceScope={i===0?'Original timeline':'Alternate timeline'} spokenLine={speech.current?.scope===(i===0?'Original timeline':'Alternate timeline')?speech.current:null} onNarrate={()=>narrate(w,i)} onStopSpeech={speech.stop} onSpeechReady={speech.ready} accent={i?'#b8a4e8':'#f6c267'}/><CivilizationHud world={w} compact/></div>)}</div>:<TownScene world={world} motionEnabled={sceneryMotion.enabled} motionPaused={splitting} onCharacter={id=>meetCitizen(id,world,null)} voiceScope="Your town" spokenLine={speech.current?.scope==='Your town'?speech.current:null} onNarrate={()=>narrate(world,null)} onStopSpeech={speech.stop} onSpeechReady={speech.ready}/>}
    {!branches&&<div className="stage-bottom"><span className="scene-hint">{pivot?'Every choice leaves a little ripple.':'Psst… click a resident to say hello.'}</span><Meters world={world}/></div>}
    {!!busy&&!pivot&&<div className="disaster-arrival" aria-hidden="true"><span>{scenario.symbol}</span><b>Four neighbors. One way through.</b></div>}
    {splitting&&<div className="split-effect" role="status"><div className="rewind-rings"/><div className="time-shards">{Array.from({length:12},(_,i)=><i key={i} style={{rotate:`${i*30}deg`}}/>)}</div><div className="split-light"/><Butterfly className="time-butterfly"/><div className="split-caption"><span>REWIND. REIMAGINE.</span><h2>One choice changes everything.</h2><p>Two futures are taking flight…</p></div></div>}
