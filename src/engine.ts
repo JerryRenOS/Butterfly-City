@@ -1,3 +1,4 @@
+import { disasters, disasterTypes, disasterConditions, type DisasterType, type DisasterState, type DisasterRound } from './disasters.js';
 export const ids = ['bob', 'alice', 'kevin', 'mia'] as const;
 export type Id = typeof ids[number];
 export const actions = ['share', 'hoard', 'trade', 'influence', 'cooperate', 'support', 'ask', 'suspicion'] as const;
@@ -6,29 +7,29 @@ export type Decisions = Record<Id, Action>;
 export const characters: Record<Id, { name: string; personality: string; role: string; color: string }> = {
   bob: { name: 'Bob', role: 'Lovable troublemaker', personality: 'Mischievous, selfish opportunist. Loves a shortcut and wants to be liked, but usually puts his own belly first.', color: '#ee8552' },
   alice: { name: 'Alice', role: 'The big-hearted optimist', personality: 'Kindhearted idealist who shares freely, values fairness, and cooperates when others show kindness.', color: '#e995ad' },
-  kevin: { name: 'Kevin', role: 'Resident overthinker', personality: 'Paranoid conspiracy theorist. Suspects pizza shortages are planned. Guards supplies unless trust is earned.', color: '#9d8ed4' },
+  kevin: { name: 'Kevin', role: 'Resident overthinker', personality: 'Suspicious, cautious inventor. Questions whether emergency supplies are being distributed fairly. Guards resources unless trust is earned.', color: '#9d8ed4' },
   mia: { name: 'Mia', role: 'Small-town visionary', personality: 'Confident entrepreneur. Sees opportunities everywhere, prefers fair trades, and builds alliances with reliable neighbors.', color: '#57b6ab' },
 };
 export type Effect = { actor: Id; target?: Id; kind: string; description: string };
 export type CivicResult = { outcome: string; summary: string; cooperativeActions: number; hungry: number; stabilityDelta: number };
-export type RoundEvent = { day: number; decisions: Decisions; notes: string[]; effects: Effect[]; civic: CivicResult };
+export type RoundEvent = { day: number; decisions: Decisions; notes: string[]; effects: Effect[]; civic: CivicResult; disaster: DisasterRound };
 export type Person = { food: number; mood: number; wealth: number; role: string; traits: string[]; recentActions: Action[] };
 export type Town = { food: number; wealth: number; trust: number; mood: number; stability: number; outcome: string; summary: string };
-export type World = { schemaVersion: 2; day: number; people: Record<Id, Person>; town: Town; trust: Record<Id, Record<Id, number>>; history: RoundEvent[]; lastDecisions: Decisions | null };
+export type World = { schemaVersion: 3; disaster: DisasterState; day: number; people: Record<Id, Person>; town: Town; trust: Record<Id, Record<Id, number>>; history: RoundEvent[]; lastDecisions: Decisions | null };
 const clamp = (n: number) => Math.max(0, Math.min(100, n));
 const epsilon = 1e-8;
 const traits: Record<Id, string[]> = { bob: ['opportunistic', 'mischievous', 'status-seeking'], alice: ['kindhearted', 'fair-minded', 'idealistic'], kevin: ['suspicious', 'cautious', 'inventive'], mia: ['enterprising', 'confident', 'pragmatic'] };
-export function initialWorld(): World {
+export function initialWorld(disasterType: DisasterType = 'tornado'): World {
   const moods = { bob: 65, alice: 72, kevin: 42, mia: 65 };
   const person = (id: Id): Person => ({ food: id === 'bob' ? 8 : 0, mood: moods[id], wealth: 3, role: characters[id].role, traits: [...traits[id]], recentActions: [] });
-  return { schemaVersion: 2, day: 0, people: { bob: person('bob'), alice: person('alice'), kevin: person('kevin'), mia: person('mia') }, town: { food: 0, wealth: 4, trust: 50, mood: 61, stability: 55, outcome: 'Uneasy Peace', summary: 'Eight slices, four neighbors, and a decision still to be made.' }, trust: Object.fromEntries(ids.map(id => [id, Object.fromEntries(ids.map(other => [other, id === other ? 100 : 50]))])) as World['trust'], history: [], lastDecisions: null };
+  return { schemaVersion: 3, disaster: { type: disasterType, damage: disasters[disasterType].initialDamage }, day: 0, people: { bob: person('bob'), alice: person('alice'), kevin: person('kevin'), mia: person('mia') }, town: { food: 0, wealth: 4, trust: 50, mood: 61, stability: 55, outcome: 'Emergency Response', summary: `${disasters[disasterType].headline} Bob rescued eight food supplies. Four neighbors must decide how to weather the crisis.` }, trust: Object.fromEntries(ids.map(id => [id, Object.fromEntries(ids.map(other => [other, id === other ? 100 : 50]))])) as World['trust'], history: [], lastDecisions: null };
 }
 export const actionDescriptions: Record<Action, string> = {
   share: 'Give up to 3 private food equally to all three neighbors. Recipients gain 6 mood and 14 trust in you; you gain 5 mood.',
   hoard: 'Keep your private food; each neighbor loses 9 trust in you. Gain 3 mood if you have food.',
   trade: 'Sell 1 food for 1 wealth to the next resident in Bob → Alice → Kevin → Mia → Bob order, if you have food and they can pay from their starting wealth after any cooperation tax. Both gain 7 mutual trust and you gain 5 mood.',
   influence: 'Give 1 food to the next resident in town order. They gain 12 trust in you; the other two lose 4 trust in you. You gain 7 mood.',
-  cooperate: 'Deposit up to 2 private food into the public pantry and pay up to 1 wealth into the town treasury. A successful contribution raises stability by 5 and every neighbor gains 6 trust in you.',
+  cooperate: 'Deposit up to 2 private food into the public pantry and pay up to 1 wealth into the town treasury. A successful contribution raises stability by 5 and every neighbor gains 6 trust in you. You also organize repairs: after emergency grants, up to 1 available public coin per successful contributor repairs 8 damage, capped by remaining damage. Repairs reopen food routes below 50 damage after the weather clears.',
   support: 'Give up to 2 private food to the poorest-fed other resident(s), splitting ties equally. Recipients gain 10 mood and 12 trust in you.',
   ask: 'Request public pantry aid toward 3 private food (dinner plus a two-food reserve). Available food is divided fairly between requesters, capped at each person’s need; current-round public donations are available.',
   suspicion: 'Spread a suspicious rumor. Lose 10 trust in every neighbor; each neighbor loses 5 trust in you. Lose 3 mood and lower stability by 4.',
@@ -55,10 +56,13 @@ export function applyRound(world: World, decisions: Decisions): World {
     const delta = next.trust[observer][target] - before;
     if (Math.abs(delta) > epsilon) effect(actor, 'trust', `${characters[observer].name}'s trust in ${characters[target].name} ${delta > 0 ? '+' : ''}${formatNumber(delta)}.`, observer);
   };
-  let stabilityChange = 0, cooperativeActions = 0, trades = 0, aidActions = 0;
+  const weather = disasterConditions(world.disaster, world.day);
+  const scenario = disasters[world.disaster.type];
+  let stabilityChange = -Math.ceil(weather.intensity / 6), cooperativeActions = 0, trades = 0, aidActions = 0;
+  notes.push(`${scenario.name}: ${weather.phase}. ${weather.intensity ? `${weather.intensity} incoming damage; stability -${Math.ceil(weather.intensity / 6)}.` : 'No new weather damage.'}`);
   if (world.day > 0) {
-    ids.forEach(id => { next.people[id].food += 2; effect(id, 'harvest', `${characters[id].name} foraged 2 food.`); });
-    notes.push('Everyone foraged 2 food. Both timelines receive the same harvest.');
+    ids.forEach(id => { next.people[id].food += weather.forage; effect(id, 'harvest', `${characters[id].name} gathered ${formatNumber(weather.forage)} food. ${weather.access}.`); });
+    notes.push(`Each resident gathered ${formatNumber(weather.forage)} food. ${weather.access}.`);
   }
   // All private spending uses beginning-of-round budgets: incoming gifts and sale proceeds cannot be spent again.
   const foodBudget = Object.fromEntries(ids.map(id => [id, next.people[id].food])) as Record<Id, number>;
@@ -141,6 +145,19 @@ export function applyRound(world: World, decisions: Decisions): World {
       next.town.wealth = Math.max(0, next.town.wealth - grant * eligible.length);
     }
   }
+  // Weather is exogenous; repair work is funded by this town's actual treasury, after urgent aid.
+  const damaged = clamp(world.disaster.damage + weather.intensity);
+  const workers = effects.filter(e => e.kind === 'cooperate').map(e => e.actor);
+  const repairCost = Math.min(next.town.wealth, workers.length, damaged / 8);
+  const repaired = repairCost * 8;
+  next.town.wealth = Math.max(0, next.town.wealth - repairCost);
+  next.disaster.damage = damaged - repaired;
+  if (repaired > epsilon) {
+    workers.forEach(id => effect(id, 'repair', `${characters[id].name} ${scenario.repair}: ${formatNumber(repaired / workers.length)} damage repaired using ${formatNumber(repairCost / workers.length)} public coins.`));
+    notes.push(`Neighbors ${scenario.repair}. ${formatNumber(repaired)} damage repaired for ${formatNumber(repairCost)} public coins.`);
+  }
+  const disaster: DisasterRound = { intensity: weather.intensity, forage: weather.forage, damageAdded: damaged - world.disaster.damage, repaired, repairCost, damageAfter: next.disaster.damage };
+  notes.push(`Village damage: ${formatNumber(next.disaster.damage)}/100. ${disasterConditions(next.disaster, world.day + 1).access}.`);
   stabilityChange -= hungry * 4;
   next.town.stability = clamp(world.town.stability + stabilityChange);
   const stabilityDelta = next.town.stability - world.town.stability;
@@ -157,20 +174,21 @@ export function applyRound(world: World, decisions: Decisions): World {
   next.town.outcome = outcome; next.town.summary = summary;
   notes.push(`${hungry} hungry after dinner. Stability ${stabilityDelta >= 0 ? '+' : ''}${formatNumber(stabilityDelta)}. ${summary}`);
   next.day++; next.lastDecisions = { ...decisions };
-  next.history.push({ day: next.day, decisions: { ...decisions }, notes, effects, civic: { outcome, summary, cooperativeActions, hungry, stabilityDelta } });
+  next.history.push({ day: next.day, decisions: { ...decisions }, notes, effects, civic: { outcome, summary, cooperativeActions, hungry, stabilityDelta }, disaster });
   return next;
 }
 
 export function demoDecisions(world: World): Decisions {
   if (world.day === 0) return { bob: 'hoard', alice: 'share', kevin: 'suspicion', mia: 'trade' };
-  return { bob: world.trust.alice.bob >= 55 ? 'cooperate' : 'influence', alice: world.people.alice.food < 1 && world.town.food > 0 ? 'ask' : world.trust.alice.bob >= 45 ? 'support' : 'hoard', kevin: world.trust.kevin.bob >= 50 ? 'cooperate' : 'suspicion', mia: world.trust.mia.bob >= 50 ? 'trade' : 'hoard' };
+  return { bob: world.trust.alice.bob >= 55 ? 'cooperate' : 'influence', alice: world.people.alice.food < 1 && world.town.food > 0 ? 'ask' : world.trust.alice.bob >= 45 ? world.disaster.damage >= 50 && world.people.alice.wealth > 0 ? 'cooperate' : 'support' : 'hoard', kevin: world.trust.kevin.bob >= 50 ? 'cooperate' : 'suspicion', mia: world.trust.mia.bob >= 50 ? 'trade' : 'hoard' };
 }
 export function divergence(a: World, b: World) {
   let different = 0;
   const compare = (x: number, y: number) => { if (Math.abs(x - y) > .001) different++; };
   ids.forEach(id => { compare(a.people[id].food, b.people[id].food); compare(a.people[id].wealth, b.people[id].wealth); compare(a.people[id].mood, b.people[id].mood); ids.filter(x => x !== id).forEach(x => compare(a.trust[id][x], b.trust[id][x])); });
   compare(a.town.food, b.town.food); compare(a.town.wealth, b.town.wealth); compare(a.town.stability, b.town.stability);
-  return { different, total: 27 };
+  compare(a.disaster.damage, b.disaster.damage);
+  return { different, total: 28 };
 }
 export function civicChain(world: World): string[] {
   if (!world.history.length) return ['Bob has not made the pivotal decision yet.', 'The town’s future is still unwritten.'];
@@ -178,22 +196,33 @@ export function civicChain(world: World): string[] {
   const bobAction = first.effects.find(effect => effect.actor === 'bob' && ['share', 'support', 'trade', 'hoard', 'influence', 'cooperate', 'ask', 'suspicion', 'unfulfilled'].includes(effect.kind));
   const bobTrust = first.effects.find(effect => effect.actor === 'bob' && effect.kind === 'trust');
   const later = world.history.slice(1).reduce((sum, event) => sum + event.civic.cooperativeActions, 0);
-  return [bobAction?.description || `Bob chose ${first.decisions.bob}.`, ...(bobTrust ? [bobTrust.description] : []), `Later rounds recorded ${later} successful cooperative act${later === 1 ? '' : 's'}. This is an observation, not proof of causation.`, `${world.town.outcome}: ${world.town.summary}`];
+  const repaired = world.history.reduce((sum, event) => sum + event.disaster.repaired, 0);
+  return [bobAction?.description || `Bob chose ${first.decisions.bob}.`, ...(bobTrust ? [bobTrust.description] : []), `Later rounds recorded ${later} successful cooperative act${later === 1 ? '' : 's'}. This is an observation, not proof of causation.`, `Funded repair work removed ${formatNumber(repaired)} damage over time; ${formatNumber(world.disaster.damage)}/100 remains.`, `${world.town.outcome}: ${world.town.summary}`];
 }
 
-/** Validates v2 saves; legacy saves are rebuilt from decisions under the new rules, never given invented AI receipts. */
+/** Older campaigns replay into the default tornado with a UI notice; inference receipts are cleared. */
 export function migrateWorld(value: unknown): World | null {
   if (!value || typeof value !== 'object') return null;
   const w = value as World;
+  const version = (value as { schemaVersion?: number }).schemaVersion;
   if (!Number.isInteger(w.day) || w.day < 0 || w.day > 1000 || !Array.isArray(w.history) || w.history.length !== w.day || !w.history.every((event, i) => event && event.day === i + 1 && validDecisions(event.decisions))) return null;
-  if (w.schemaVersion !== undefined && w.schemaVersion !== 2) return null;
-  if (w.schemaVersion !== 2) {
+  if (version !== undefined && version !== 2 && version !== 3) return null;
+  if (version !== 3) {
     let replayed = initialWorld();
     for (const event of w.history) replayed = applyRound(replayed, event.decisions);
     return replayed;
   }
   const resource = (n: unknown) => typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= 1e9;
   const stat = (n: unknown) => resource(n) && (n as number) <= 100;
+  if (!w.disaster || !disasterTypes.includes(w.disaster.type) || !stat(w.disaster.damage)) return null;
+  let previousDamage = disasters[w.disaster.type].initialDamage;
+  for (const event of w.history) {
+    const d = event.disaster;
+    const expected = disasterConditions({ type: w.disaster.type, damage: previousDamage }, event.day - 1);
+    if (!d || ![d.intensity, d.damageAdded, d.repaired, d.damageAfter].every(stat) || !resource(d.repairCost) || d.repairCost > 4 || d.forage !== expected.forage || d.intensity !== expected.intensity || Math.abs(d.damageAdded - Math.min(d.intensity, 100 - previousDamage)) > epsilon || Math.abs(d.repaired - d.repairCost * 8) > epsilon || Math.abs(d.damageAfter - (previousDamage + d.damageAdded - d.repaired)) > epsilon) return null;
+    previousDamage = d.damageAfter;
+  }
+  if (Math.abs(w.disaster.damage - previousDamage) > epsilon) return null;
   if (!ids.every(id => {
     const p = w.people?.[id];
     return p && resource(p.food) && resource(p.wealth) && stat(p.mood) && typeof p.role === 'string' && Array.isArray(p.traits) && p.traits.every(t => typeof t === 'string') && Array.isArray(p.recentActions) && p.recentActions.length <= 6 && p.recentActions.every(action => actions.includes(action)) && ids.every(other => stat(w.trust?.[id]?.[other]));
@@ -207,5 +236,5 @@ export function migrateWorld(value: unknown): World | null {
 }
 
 export function isWorld(value: unknown): value is World {
-  return !!value && typeof value === 'object' && (value as World).schemaVersion === 2 && migrateWorld(value) !== null;
+  return !!value && typeof value === 'object' && (value as World).schemaVersion === 3 && migrateWorld(value) !== null;
 }

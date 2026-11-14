@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { disasters, disasterConditions } from '../src/disasters.js';
 import express from 'express';
 import { performance } from 'node:perf_hooks';
 import { resolve } from 'node:path';
@@ -15,7 +16,7 @@ export function validWorld(value: unknown): value is World {
   const w = value as World;
   const resource = (n: unknown) => typeof n==='number' && Number.isFinite(n) && n>=0 && n<=1000000;
   const bounded = (n: unknown) => resource(n) && (n as number)<=100;
-  return isWorld(value) && w.schemaVersion===2 && Number.isInteger(w.day) && w.day>=0 && w.day<=1000
+  return isWorld(value) && w.schemaVersion===3 && Number.isInteger(w.day) && w.day>=0 && w.day<=1000
     && Array.isArray(w.history) && w.history.length===w.day
     && !!w.town && resource(w.town.food) && resource(w.town.wealth)
     && ['trust','mood','stability'].every(k=>bounded(w.town[k as 'trust'|'mood'|'stability']))
@@ -32,7 +33,8 @@ export function makeDrexRequest(world: World) {
   return {
     model,
     state: {
-      setting: "Butterfly City is a miniature civilization after a food shortage. Bob starts with the last pizza (8 food). Decide in character, not as an impartial planner. All four actions are simultaneous against this SAME snapshot: do not assume another person's current choice. After day 0, each citizen forages 2 food before acting. Resource budgets are fixed before actions; gifts and income received this round cannot be spent again in the same round. Dinner costs 1 food each: +4 mood if fed, -12 if hungry. Trust[a][b] is a's trust toward b. Public pantry and treasury are distinct from private resources. After dinner on later days the treasury fairly grants up to one coin to each hungry citizen with less than one private coin, subject to funds; grants can only be spent next round. Evaluate each action using the exact action criteria. Personality traits, role, hunger, wealth, relationships, recent actions, and public stability should influence decisions. Civic outcomes are calculated AFTER the round by deterministic rules. Do not predict or replace those outcomes.",
+      setting: "Butterfly City is a miniature civilization recovering from a natural disaster. Bob rescued an emergency cache of 8 food; the others have no private food initially. Decide in character, not as an impartial planner. All four actions are simultaneous against this SAME snapshot: do not assume another person's current choice. The forecast specifies food gathered per citizen before actions (0 on day 0). Active weather restricts gathering; after it clears, damage of 50 or more limits gathering to 1 food, otherwise 2. Weather adds the forecast intensity to damage, capped at 100, and reduces stability by ceil(intensity / 6). After dinner and emergency grants, each successful cooperate action organizes up to one public coin of repair, repairing 8 damage per coin, capped by remaining damage and treasury funds. Repair costs are consumed. The identical weather calendar applies to both timelines; repairs may diverge. Resource budgets are fixed before actions; gifts and income received this round cannot be spent again in the same round. Dinner costs 1 food each: +4 mood if fed, -12 if hungry. Trust[a][b] is a's trust toward b. Public pantry and treasury are distinct from private resources. After dinner on later days the treasury fairly grants up to one coin to each hungry citizen with less than one private coin, subject to funds; grants can only be spent next round. Evaluate each action using the exact action criteria. Personality traits, role, hunger, wealth, relationships, recent actions, and public stability should influence decisions. Civic outcomes are calculated AFTER the round by deterministic rules. Do not predict or replace those outcomes.",
+      disaster: { ...world.disaster, name: disasters[world.disaster.type].name, description: disasters[world.disaster.type].description }, forecast: disasterConditions(world.disaster, world.day),
       characters, day:world.day, people:world.people, publicTown:world.town, trust:world.trust,
       recentEvents:world.history.slice(-3), lastDecisions:world.lastDecisions,
     },
