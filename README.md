@@ -120,7 +120,9 @@ The first round has no gathering. Weather reduces stability by `ceil(intensity /
 
 After dinner and emergency grants, every **successful cooperate** action can fund up to 1 public coin of repair. Each coin removes 8 damage; spending is capped by available treasury funds and remaining damage. Private donations transfer money; repairs consume it. A failed contribution or an empty treasury cannot repair anything. Damage does not heal merely because an animation plays.
 
-Tornado funnels and wind, coastal waves/floodwater, and snowfall/drifts are local SVG/CSS layers over the existing painted village. Active weather clears on schedule; remaining debris, flood depth, and snow cover track persistent damage. Citizens who actually fund repairs move to the corresponding work site. HUDs show remaining damage, next gathering, and the day's damage/repair/cost record. Journals retain all recorded consequences. Reduced-motion mode leaves static weather and state indicators.
+Disasters now use two procedural Canvas2D depth planes over the painted village. Tornadoes have a shaded, noise-textured rotating column, orbiting debris, a ground dust skirt, and wind-driven rain. Tsunamis send successive turbulent surge fronts through deeper moving water, with spray, broken foam, floating debris, and a restrained foreground wash. Blizzards use dense snowfall at multiple depths, blowing mist, irregular snowbanks, and snow settling onto the painted roof/ground textures. The foreground veil never intercepts citizen or HUD clicks.
+
+Storm strength follows the existing shared calendar; repairs reduce lingering debris, flood depth, and snow coverage in each timeline. These effects visualize the existing simulation; they do not add damage or alter its rules. Citizens who actually fund repairs still move to the corresponding work site. Pause freezes both weather planes; reduced motion shows a static storm. Hidden/offscreen weather suspends drawing, rendering is capped at 30 fps and a bounded pixel resolution, and the existing SVG/CSS effects remain as a Canvas2D fallback.
 
 ## Counterfactual rules
 
