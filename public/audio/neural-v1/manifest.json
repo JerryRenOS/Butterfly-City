@@ -1,0 +1,1214 @@
+{
+  "version": "neural-v1",
+  "format": "MP3, 24 kHz, 48 kbit/s, mono (original service output; no lossy re-encoding)",
+  "generator": "edge-tts 7.3.1",
+  "sourceUrl": "https://github.com/rany2/edge-tts",
+  "provider": "Microsoft Edge online text-to-speech",
+  "voiceFamily": "Standard neural",
+  "source": "src/characterDialogue.ts",
+  "castSource": "src/voiceCast.ts",
+  "generatedAt": "2026-11-15T01:45:39.920Z",
+  "note": "Synthetic prerecorded game dialogue. Voice locale was checked against the online catalog. Prosody varies gently using rate only; pitch and volume remain neutral. These are not HD voices or expressive-style SSML. Generation requires network access; game playback uses bundled files only.",
+  "clips": [
+    {
+      "id": "bob",
+      "key": "intro",
+      "text": "I'm Bob. I managed to save some supplies. Now, what are we going to do?",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/intro.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 6.84,
+      "bytes": 41040,
+      "sha256": "aeec4f0ef64775c8803fb163a6b6a1ac59e784d84248ed75907ea086dd6decaa",
+      "validation": {
+        "decodedPcmSamples": 164160,
+        "peak": 19360,
+        "rms": 2502.32
+      }
+    },
+    {
+      "id": "bob",
+      "key": "share",
+      "text": "All right, take a little. There's some for everyone.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/share.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.608,
+      "bytes": 27648,
+      "sha256": "80eb75a34c92d2185899a4f3d54cb3c56cc4d8f8d13eaaa8c0ee2c66629f415a",
+      "validation": {
+        "decodedPcmSamples": 110592,
+        "peak": 20725,
+        "rms": 2537.59
+      }
+    },
+    {
+      "id": "bob",
+      "key": "hoard",
+      "text": "I'm keeping what I've got. Just for now.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/hoard.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.912,
+      "bytes": 23472,
+      "sha256": "803bab37dc2d5667091920eb2bfc504da34e7a967cf4b47c0a5ec6a50e2a4f19",
+      "validation": {
+        "decodedPcmSamples": 93888,
+        "peak": 19218,
+        "rms": 2545.71
+      }
+    },
+    {
+      "id": "bob",
+      "key": "trade",
+      "text": "There we are. A fair deal, wouldn't you say?",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/trade.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.44,
+      "bytes": 26640,
+      "sha256": "5e5b1f87dbae8ecff430b93dff22ba76a1fccfa1f01361c1467899ec48721d63",
+      "validation": {
+        "decodedPcmSamples": 106560,
+        "peak": 17834,
+        "rms": 2629.55
+      }
+    },
+    {
+      "id": "bob",
+      "key": "influence",
+      "text": "Here you go. Just remember who looked out for you.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/influence.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.32,
+      "bytes": 25920,
+      "sha256": "1f33b7d55c2733e7074145f79e3b827063177fb8c85c289f6168d7da4e2698d8",
+      "validation": {
+        "decodedPcmSamples": 103680,
+        "peak": 22362,
+        "rms": 2658.38
+      }
+    },
+    {
+      "id": "bob",
+      "key": "cooperate",
+      "text": "Oh, all right. I'll put something towards the village.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/cooperate.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.872,
+      "bytes": 29232,
+      "sha256": "3dcc2c2d0ca0c5556bb9501d428e52db2df937c786a2a816dd052f7c6a9737a8",
+      "validation": {
+        "decodedPcmSamples": 116928,
+        "peak": 17346,
+        "rms": 2343.27
+      }
+    },
+    {
+      "id": "bob",
+      "key": "support",
+      "text": "Here, take this. Don't say I never help.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/support.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.32,
+      "bytes": 25920,
+      "sha256": "3db6bc3f1950b93402e626c10f0f1913fb9b26f49634bd711ae68be2d8a28591",
+      "validation": {
+        "decodedPcmSamples": 103680,
+        "peak": 20826,
+        "rms": 2428.99
+      }
+    },
+    {
+      "id": "bob",
+      "key": "ask",
+      "text": "Could I have a bit from the pantry today?",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/ask.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 2.928,
+      "bytes": 17568,
+      "sha256": "86e765c4f5ab6be805d3b6fa14a0975d9875a8c393bc27e104473a637f0fcc4f",
+      "validation": {
+        "decodedPcmSamples": 70272,
+        "peak": 20118,
+        "rms": 2405.74
+      }
+    },
+    {
+      "id": "bob",
+      "key": "suspicion",
+      "text": "I don't know. Something about this feels off.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/suspicion.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.152,
+      "bytes": 24912,
+      "sha256": "216467f99bf1400818ad931b0379446792ecfa02a289eba836ff53f30a17772a",
+      "validation": {
+        "decodedPcmSamples": 99648,
+        "peak": 19784,
+        "rms": 2314.38
+      }
+    },
+    {
+      "id": "bob",
+      "key": "unfulfilled",
+      "text": "Well, that didn't work out. I'll have to think again.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "-4%",
+      "src": "/audio/neural-v1/bob/unfulfilled.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.872,
+      "bytes": 29232,
+      "sha256": "5a28bd0bc3b73e6c3601e8116f574b73e086d3e557669fe337204fa893a72ec7",
+      "validation": {
+        "decodedPcmSamples": 116928,
+        "peak": 19053,
+        "rms": 2385.32
+      }
+    },
+    {
+      "id": "bob",
+      "key": "greeting",
+      "text": "We're still here, aren't we? We'll find a way through.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/greeting.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.704,
+      "bytes": 28224,
+      "sha256": "cc4b4780a33f459d1852a683d4e76db8107a097443daa2a549d7b562085808a2",
+      "validation": {
+        "decodedPcmSamples": 112896,
+        "peak": 19984,
+        "rms": 2917.23
+      }
+    },
+    {
+      "id": "bob",
+      "key": "thanks",
+      "text": "Thanks for that. I needed a bit of good news.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+1%",
+      "src": "/audio/neural-v1/bob/thanks.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.296,
+      "bytes": 25776,
+      "sha256": "6bbe39cf1311fe1cab11caf0fa666f64cf7211da3527121123f0f7396bc5c197",
+      "validation": {
+        "decodedPcmSamples": 103104,
+        "peak": 22229,
+        "rms": 2505.93
+      }
+    },
+    {
+      "id": "bob",
+      "key": "reassure",
+      "text": "Hang on. Let's think this through together.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "-3%",
+      "src": "/audio/neural-v1/bob/reassure.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.984,
+      "bytes": 23904,
+      "sha256": "1b772ecf82d11dbe5be46819b1b93b538a3c146ce4b5c6b6ff67cd944129434d",
+      "validation": {
+        "decodedPcmSamples": 95616,
+        "peak": 18979,
+        "rms": 2213.96
+      }
+    },
+    {
+      "id": "bob",
+      "key": "concern",
+      "text": "I'm not sure about that. What happens to everyone else?",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "-5%",
+      "src": "/audio/neural-v1/bob/concern.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.752,
+      "bytes": 28512,
+      "sha256": "253027be9b638e17dcd4215dc35e97f3537d61d41d16da20d6105a919be7b254",
+      "validation": {
+        "decodedPcmSamples": 114048,
+        "peak": 20855,
+        "rms": 2582.65
+      }
+    },
+    {
+      "id": "bob",
+      "key": "agree",
+      "text": "Yes, that's a start. Let's keep at it.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/bob/agree.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.296,
+      "bytes": 25776,
+      "sha256": "7970053c326439bdeea02787e26a008a3eb2707942a5c7aac3338410ee34146b",
+      "validation": {
+        "decodedPcmSamples": 103104,
+        "peak": 19085,
+        "rms": 2161.04
+      }
+    },
+    {
+      "id": "alice",
+      "key": "intro",
+      "text": "I'm Alice. How are you holding up? We don't have to face this alone.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/intro.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.256,
+      "bytes": 31536,
+      "sha256": "2430af4bdf03902b3260d0d0ee9f894d3519db093c0ac0d6799d9d320fa86581",
+      "validation": {
+        "decodedPcmSamples": 126144,
+        "peak": 17068,
+        "rms": 3477.05
+      }
+    },
+    {
+      "id": "alice",
+      "key": "share",
+      "text": "Here's a little for everyone. Let's make it stretch.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/share.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.84,
+      "bytes": 23040,
+      "sha256": "602d5822277c1628022161c7cfc05ca72a9604a159aa663207874ad7a7ec51f2",
+      "validation": {
+        "decodedPcmSamples": 92160,
+        "peak": 18773,
+        "rms": 3233.66
+      }
+    },
+    {
+      "id": "alice",
+      "key": "hoard",
+      "text": "I'm sorry. I need to look after myself today.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/hoard.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.624,
+      "bytes": 21744,
+      "sha256": "845575f1622a41c98e4f1874f16f0fd84abb8a6445c24408c467e7f563222432",
+      "validation": {
+        "decodedPcmSamples": 86976,
+        "peak": 17310,
+        "rms": 4036.92
+      }
+    },
+    {
+      "id": "alice",
+      "key": "trade",
+      "text": "That feels fair. I'm glad we could work it out.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/trade.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.672,
+      "bytes": 22032,
+      "sha256": "f3a77f71a34c67088ada3b8a0dbaf348d3b62a4a09b79806d3bc5f05ea21ecec",
+      "validation": {
+        "decodedPcmSamples": 88128,
+        "peak": 17325,
+        "rms": 3493
+      }
+    },
+    {
+      "id": "alice",
+      "key": "influence",
+      "text": "Here, this is for you. I hope you'll remember me.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/influence.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.84,
+      "bytes": 23040,
+      "sha256": "2e1ca722916e7cf9f75f9a66449968062ba0d5c4982a60e098cdaedb495df38d",
+      "validation": {
+        "decodedPcmSamples": 92160,
+        "peak": 19071,
+        "rms": 4100.11
+      }
+    },
+    {
+      "id": "alice",
+      "key": "cooperate",
+      "text": "I'll put in what I can. This place matters to me.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/cooperate.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.888,
+      "bytes": 23328,
+      "sha256": "03153f489c68306cb95b07acdcd95488549c99ef6ee96eaa1e5979355d02533c",
+      "validation": {
+        "decodedPcmSamples": 93312,
+        "peak": 19273,
+        "rms": 3620.16
+      }
+    },
+    {
+      "id": "alice",
+      "key": "support",
+      "text": "Here, take some of mine. No one should go hungry.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/support.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.08,
+      "bytes": 24480,
+      "sha256": "af1c400ac913611df7c8cc9ece3fe8ad1df9c2ff77e87d8001f678b6d97b4106",
+      "validation": {
+        "decodedPcmSamples": 97920,
+        "peak": 18218,
+        "rms": 4354.34
+      }
+    },
+    {
+      "id": "alice",
+      "key": "ask",
+      "text": "I could use a little pantry food myself today.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/ask.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.288,
+      "bytes": 19728,
+      "sha256": "8cb85e8173dbd86707bdd44879499d6c6b5c7d3a797a7d690e1a65f50c57bed5",
+      "validation": {
+        "decodedPcmSamples": 78912,
+        "peak": 17956,
+        "rms": 3778.61
+      }
+    },
+    {
+      "id": "alice",
+      "key": "suspicion",
+      "text": "I hate feeling like this. I don't know who to trust.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/suspicion.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.008,
+      "bytes": 24048,
+      "sha256": "e78575f6cdda4d32af8aeaec8d811ce309d6ea4c2e294cb18d35863afaeea2a8",
+      "validation": {
+        "decodedPcmSamples": 96192,
+        "peak": 18618,
+        "rms": 3741.73
+      }
+    },
+    {
+      "id": "alice",
+      "key": "unfulfilled",
+      "text": "That didn't go as I'd hoped. Let's try something else.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "-4%",
+      "src": "/audio/neural-v1/alice/unfulfilled.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.296,
+      "bytes": 25776,
+      "sha256": "26bdc7f14c11666c4f7ce7adfc3de69afc5572a2cfc563d97c63bd4498208798",
+      "validation": {
+        "decodedPcmSamples": 103104,
+        "peak": 17058,
+        "rms": 2934.16
+      }
+    },
+    {
+      "id": "alice",
+      "key": "greeting",
+      "text": "I'm holding up, thank you. It's good to see a familiar face.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/greeting.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.704,
+      "bytes": 28224,
+      "sha256": "244dd150798546d9ee9601d1d6eadb60a8eb4086e84b6ea5811eedf462b839e0",
+      "validation": {
+        "decodedPcmSamples": 112896,
+        "peak": 17997,
+        "rms": 3596.91
+      }
+    },
+    {
+      "id": "alice",
+      "key": "thanks",
+      "text": "Thank you. That really does mean a lot.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+1%",
+      "src": "/audio/neural-v1/alice/thanks.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.192,
+      "bytes": 19152,
+      "sha256": "36466360c786c9cba428a41d7b9966bba7d93d56ab77a63d927a10a2b3b8d973",
+      "validation": {
+        "decodedPcmSamples": 76608,
+        "peak": 16225,
+        "rms": 3991.74
+      }
+    },
+    {
+      "id": "alice",
+      "key": "reassure",
+      "text": "Take your time. I'm here, and I'm listening.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "-3%",
+      "src": "/audio/neural-v1/alice/reassure.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.672,
+      "bytes": 22032,
+      "sha256": "6f71f99217efc00ca8275162da694a05bac2450b44116144eeee46f36fb4c43f",
+      "validation": {
+        "decodedPcmSamples": 88128,
+        "peak": 16501,
+        "rms": 3466.04
+      }
+    },
+    {
+      "id": "alice",
+      "key": "concern",
+      "text": "I'm worried about the others. How will they manage?",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "-5%",
+      "src": "/audio/neural-v1/alice/concern.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.84,
+      "bytes": 23040,
+      "sha256": "f8fe58ae92207a8b923c34cb7a1afe90984e11a8e816484c332768c78ef2109c",
+      "validation": {
+        "decodedPcmSamples": 92160,
+        "peak": 15345,
+        "rms": 3833.68
+      }
+    },
+    {
+      "id": "alice",
+      "key": "agree",
+      "text": "It all helps. Let's keep looking after each other.",
+      "accent": "British",
+      "locale": "en-GB",
+      "voice": "en-GB-SoniaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/alice/agree.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.744,
+      "bytes": 22464,
+      "sha256": "f7660b09c6ab726d032479563f85dbe52dc7f1dcea5c5db35b10c6bc682ffa7c",
+      "validation": {
+        "decodedPcmSamples": 89856,
+        "peak": 18455,
+        "rms": 3311.61
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "intro",
+      "text": "I'm Kevin. Before we rush into anything, let's see what we've got.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/intro.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 6.456,
+      "bytes": 38736,
+      "sha256": "7f68f2330345af6a19fdbf110a5130763f777e17af986689c0da3b269a8fac29",
+      "validation": {
+        "decodedPcmSamples": 154944,
+        "peak": 25215,
+        "rms": 4249.35
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "share",
+      "text": "Go on, take some. I suppose we have to trust each other.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/share.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.688,
+      "bytes": 34128,
+      "sha256": "49afe102f8bba0756676409c7467593268ec34fec709a9eab30b46add9f4066b",
+      "validation": {
+        "decodedPcmSamples": 136512,
+        "peak": 25675,
+        "rms": 4266.24
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "hoard",
+      "text": "I'd rather keep what I've got. We don't know what's coming.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/hoard.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.784,
+      "bytes": 34704,
+      "sha256": "da370e9b502316a173123f54963b3c8856fde2ca9e2a0fcc08f337af31789d08",
+      "validation": {
+        "decodedPcmSamples": 138816,
+        "peak": 24629,
+        "rms": 4053.43
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "trade",
+      "text": "Yes, those numbers work. That seems fair to me.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/trade.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.376,
+      "bytes": 32256,
+      "sha256": "f1c6eb552e594822e559998de596418f66469a140784cb318ad1fbfcad5ef42b",
+      "validation": {
+        "decodedPcmSamples": 129024,
+        "peak": 23872,
+        "rms": 4121.82
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "influence",
+      "text": "Here you are. We should look out for each other, shouldn't we?",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/influence.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.352,
+      "bytes": 32112,
+      "sha256": "4dd534695ed1a314014de47a85fb2b1f3cf5ea7cc7b8bbafd9c89ff9f2740d86",
+      "validation": {
+        "decodedPcmSamples": 128448,
+        "peak": 26464,
+        "rms": 4193.28
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "cooperate",
+      "text": "I've put something in. Let's see what we can do with it.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/cooperate.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.328,
+      "bytes": 31968,
+      "sha256": "f485a7e1b1f81091de2beb8683ada90590273da64a82108b299e8594b6618051",
+      "validation": {
+        "decodedPcmSamples": 127872,
+        "peak": 24410,
+        "rms": 4051.08
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "support",
+      "text": "Here, this might help. It's something, at least.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/support.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.112,
+      "bytes": 30672,
+      "sha256": "c665af702ff59dafe6c080a845b816183309c50f6bd7136f8f24c627731a3fb5",
+      "validation": {
+        "decodedPcmSamples": 122688,
+        "peak": 25160,
+        "rms": 3633.45
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "ask",
+      "text": "Could I ask for some food from the pantry?",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/ask.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 3.504,
+      "bytes": 21024,
+      "sha256": "f9495008ae126394481faf39e7b580ddc8a63e2a01c3c64ca9d7516e98aff64b",
+      "validation": {
+        "decodedPcmSamples": 84096,
+        "peak": 24978,
+        "rms": 4786.47
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "suspicion",
+      "text": "Something doesn't add up. Am I the only one who sees it?",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/suspicion.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.496,
+      "bytes": 32976,
+      "sha256": "73e0ac588a062ff953bf06733eb3255d7cf61cab55cfcd437361d0ddf208e674",
+      "validation": {
+        "decodedPcmSamples": 131904,
+        "peak": 24671,
+        "rms": 4555.32
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "unfulfilled",
+      "text": "No, that won't work. I need to rethink this.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "-4%",
+      "src": "/audio/neural-v1/kevin/unfulfilled.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.304,
+      "bytes": 31824,
+      "sha256": "97fd1b62649ef2f7ed4fa680d406735cb092d1c36ad8406e7fba505a36016731",
+      "validation": {
+        "decodedPcmSamples": 127296,
+        "peak": 25205,
+        "rms": 4187.09
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "greeting",
+      "text": "I'm managing, thanks. Let's work through this one step at a time.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/greeting.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 6.24,
+      "bytes": 37440,
+      "sha256": "6f7e24302d24fc905ea5cebfcd1ccb1eb3db7d4acb3a0f23bd91ff55f9391ba4",
+      "validation": {
+        "decodedPcmSamples": 149760,
+        "peak": 24059,
+        "rms": 3841.11
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "thanks",
+      "text": "Thank you. That's one less thing to worry about.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+1%",
+      "src": "/audio/neural-v1/kevin/thanks.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.728,
+      "bytes": 28368,
+      "sha256": "270d21cb2b1c8e8cbaddc3d8c444abd6489dc93ad6333cb855a4034346c59efc",
+      "validation": {
+        "decodedPcmSamples": 113472,
+        "peak": 24064,
+        "rms": 3933.5
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "reassure",
+      "text": "Let's slow down and check what we actually know.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "-3%",
+      "src": "/audio/neural-v1/kevin/reassure.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.296,
+      "bytes": 25776,
+      "sha256": "e99cdcf6e189eef1a9e064372d583373125970044b61e919535af2fe1e24223a",
+      "validation": {
+        "decodedPcmSamples": 103104,
+        "peak": 25660,
+        "rms": 4439.22
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "concern",
+      "text": "That worries me. Have we thought this through?",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "-5%",
+      "src": "/audio/neural-v1/kevin/concern.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.608,
+      "bytes": 27648,
+      "sha256": "bfe5f5f6b791c4422e169774da408a58fc0ff1603eb30a5ef5eefff92e666c17",
+      "validation": {
+        "decodedPcmSamples": 110592,
+        "peak": 24886,
+        "rms": 3657.1
+      }
+    },
+    {
+      "id": "kevin",
+      "key": "agree",
+      "text": "Yes, that helps. Let's work out what comes next.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-PrabhatNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/kevin/agree.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.424,
+      "bytes": 32544,
+      "sha256": "931144cebfbb0ca35c92d0a544c03fd23ad25d594ea9579d2704b64b8d56f99a",
+      "validation": {
+        "decodedPcmSamples": 130176,
+        "peak": 25360,
+        "rms": 3429.15
+      }
+    },
+    {
+      "id": "mia",
+      "key": "intro",
+      "text": "I'm Mia. It's a mess, I know. Come on, let's figure out where to start.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/intro.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 7.776,
+      "bytes": 46656,
+      "sha256": "7ce10cf0885d5e53247e9ade5187bf1e7113963e0ccd68c657be0e5699f37faf",
+      "validation": {
+        "decodedPcmSamples": 186624,
+        "peak": 18804,
+        "rms": 2324.94
+      }
+    },
+    {
+      "id": "mia",
+      "key": "share",
+      "text": "Take a little each. We need everyone on their feet.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/share.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.256,
+      "bytes": 31536,
+      "sha256": "6695ccbe95c5a425b8fe07d74098de6c568d7c98a7d5f6126510df1f29768f60",
+      "validation": {
+        "decodedPcmSamples": 126144,
+        "peak": 17237,
+        "rms": 2380.81
+      }
+    },
+    {
+      "id": "mia",
+      "key": "hoard",
+      "text": "I'm holding on to what I've got. Tomorrow could be rough.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/hoard.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.184,
+      "bytes": 31104,
+      "sha256": "b4e080769ca72f669ee32aca14f503fad8b71c540ba8bcb77c2d5f7775030f4e",
+      "validation": {
+        "decodedPcmSamples": 124416,
+        "peak": 17890,
+        "rms": 2365.8
+      }
+    },
+    {
+      "id": "mia",
+      "key": "trade",
+      "text": "Done. That's a good deal for both of us.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/trade.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.464,
+      "bytes": 26784,
+      "sha256": "6f6b9c39808b4ebb674cc8d30c48771a5feccb16239c59b88564a486f8f68ad6",
+      "validation": {
+        "decodedPcmSamples": 107136,
+        "peak": 18424,
+        "rms": 2207.17
+      }
+    },
+    {
+      "id": "mia",
+      "key": "influence",
+      "text": "Here, take this. We could make a good team.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/influence.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.752,
+      "bytes": 28512,
+      "sha256": "2cab2246fabcb545213b97ce923d0b26e4fc574fc9b72a03654aefc49418e478",
+      "validation": {
+        "decodedPcmSamples": 114048,
+        "peak": 14951,
+        "rms": 2091.91
+      }
+    },
+    {
+      "id": "mia",
+      "key": "cooperate",
+      "text": "I'm putting something in. Let's get this place going again.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/cooperate.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.208,
+      "bytes": 31248,
+      "sha256": "93c084d5d7d9c7feb41871ec379c488133f697d774fa9c7c2be9943f89e514f2",
+      "validation": {
+        "decodedPcmSamples": 124992,
+        "peak": 18560,
+        "rms": 2457.64
+      }
+    },
+    {
+      "id": "mia",
+      "key": "support",
+      "text": "Here you go. We all need a hand sometimes.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/support.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.752,
+      "bytes": 28512,
+      "sha256": "4a986120cd246151eabcc9552d4fb0c94f6cb764d5e97def81cf76f140962c71",
+      "validation": {
+        "decodedPcmSamples": 114048,
+        "peak": 17329,
+        "rms": 2416.45
+      }
+    },
+    {
+      "id": "mia",
+      "key": "ask",
+      "text": "I'm running short. Is there something in the pantry?",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/ask.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.704,
+      "bytes": 28224,
+      "sha256": "b9c6551e0939333c9429164afb2546e7869b60a6e989e799d8f75b7f2e663fea",
+      "validation": {
+        "decodedPcmSamples": 112896,
+        "peak": 17939,
+        "rms": 2410.58
+      }
+    },
+    {
+      "id": "mia",
+      "key": "suspicion",
+      "text": "Wait a second. These numbers aren't adding up.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/suspicion.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.944,
+      "bytes": 29664,
+      "sha256": "d7e65af8724694a4884b44d24d4749efc44c22d71dd270dd2b3133511f0e9c37",
+      "validation": {
+        "decodedPcmSamples": 118656,
+        "peak": 17636,
+        "rms": 2379.1
+      }
+    },
+    {
+      "id": "mia",
+      "key": "unfulfilled",
+      "text": "That didn't pan out. Let's find another way.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "-4%",
+      "src": "/audio/neural-v1/mia/unfulfilled.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.992,
+      "bytes": 29952,
+      "sha256": "149b70f1e93b075f18a557fc41319abe265643c1a00867013572a726759447ef",
+      "validation": {
+        "decodedPcmSamples": 119808,
+        "peak": 22028,
+        "rms": 2400.54
+      }
+    },
+    {
+      "id": "mia",
+      "key": "greeting",
+      "text": "We'll work it out. One problem at a time, yes?",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/greeting.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.28,
+      "bytes": 31680,
+      "sha256": "e5c09533199d7b757ca47de8e99414baeb9df1b2711dff7a8fe9ac513165df03",
+      "validation": {
+        "decodedPcmSamples": 126720,
+        "peak": 17678,
+        "rms": 2446.78
+      }
+    },
+    {
+      "id": "mia",
+      "key": "thanks",
+      "text": "Thanks, I appreciate it. That makes a difference.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+1%",
+      "src": "/audio/neural-v1/mia/thanks.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.208,
+      "bytes": 31248,
+      "sha256": "e1d6c9543ec162abba7ce039fc846146e333e0507077456254eafa5d1dd7be56",
+      "validation": {
+        "decodedPcmSamples": 124992,
+        "peak": 19201,
+        "rms": 2015.89
+      }
+    },
+    {
+      "id": "mia",
+      "key": "reassure",
+      "text": "Let's try a different angle. We still have options.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "-3%",
+      "src": "/audio/neural-v1/mia/reassure.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.424,
+      "bytes": 32544,
+      "sha256": "9335f47047ce2eea2f3a0329c9857ad2b092830cdbcb684abcebc97a9ef87621",
+      "validation": {
+        "decodedPcmSamples": 130176,
+        "peak": 18783,
+        "rms": 2355.57
+      }
+    },
+    {
+      "id": "mia",
+      "key": "concern",
+      "text": "I'm not sold on that. What about the rest of town?",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "-5%",
+      "src": "/audio/neural-v1/mia/concern.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 5.304,
+      "bytes": 31824,
+      "sha256": "25e31adc2563e70ed1bdb547c0026641f43a9166efbffbd02ea1040d7af23be6",
+      "validation": {
+        "decodedPcmSamples": 127296,
+        "peak": 19384,
+        "rms": 2459.94
+      }
+    },
+    {
+      "id": "mia",
+      "key": "agree",
+      "text": "We're getting somewhere. Let's keep going.",
+      "accent": "Indian",
+      "locale": "en-IN",
+      "voice": "en-IN-NeerjaNeural",
+      "rate": "+0%",
+      "src": "/audio/neural-v1/mia/agree.mp3",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "durationSeconds": 4.224,
+      "bytes": 25344,
+      "sha256": "558040588a70c31c9c526d6d778b98dcfc5a683d80647da2eaeaf4930e85e156",
+      "validation": {
+        "decodedPcmSamples": 101376,
+        "peak": 17532,
+        "rms": 2303.57
+      }
+    }
+  ]
+}
