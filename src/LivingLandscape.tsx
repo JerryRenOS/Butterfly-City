@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { DisasterState } from './disasters';
+import { weatherVisuals } from './weatherVisuals';
 import { fabricRegions, foliageRegions, landscapeCover, landscapeMotionProfile } from './landscapeMotion';
 
 type Props = {
@@ -29,6 +30,8 @@ uniform float uTime;
 uniform float uWind;
 uniform float uSpeed;
 uniform float uCloudSpeed;
+uniform float uSnow;
+uniform float uWet;
 varying vec2 vUv;
 float mask(vec2 p, vec4 area) {
   float distance = length((p - area.xy) / area.zw);
@@ -57,6 +60,15 @@ void main() {
   float cloudShadow = sin(uv.x * 7.0 + uv.y * 2.0 - cloudTime * 0.32) * 0.018;
   float leafShadow = sin(uv.x * 32.0 + uv.y * 23.0 + t * 0.7) * 0.012 * plants;
   colour *= 1.0 + cloudShadow + leafShadow;
+  // Snow collects on the existing roofs and ground in image coordinates, not a screen-sized white sheet.
+  float roofs = max(mask(uv, vec4(0.48,0.235,0.23,0.105)), max(mask(uv,vec4(0.235,0.33,0.16,0.075)), mask(uv,vec4(0.81,0.29,0.19,0.09))));
+  float ground = smoothstep(0.69,0.87,uv.y);
+  float grain = fract(sin(dot(floor(uv*900.0),vec2(12.9898,78.233)))*43758.5453);
+  float brightness = dot(colour,vec3(0.3,0.59,0.11));
+  float settled = (roofs*0.78 + ground*0.48) * uSnow * (0.65 + grain*0.35);
+  colour = mix(colour,vec3(0.72,0.83,0.88)*(0.65+brightness*0.5),clamp(settled,0.0,0.85));
+  colour *= mix(vec3(1.0),vec3(0.82,0.92,0.98),uWet*ground);
+
   gl_FragColor = vec4(colour, 1.0);
 }`;
 
@@ -106,7 +118,7 @@ export function LivingLandscape({ src, alt, disaster, day, paused = false, reduc
       shaders.forEach(s => gl.deleteShader(s)); gl.deleteProgram(program); gl.deleteBuffer(buffer); gl.deleteTexture(texture);
       canvas.dataset.motion = 'unavailable'; return;
     }
-    const uniforms = Object.fromEntries(['uImage', 'uScale', 'uOffset', 'uTime', 'uWind', 'uSpeed', 'uCloudSpeed'].map(key => [key, gl.getUniformLocation(program, key)]));
+    const uniforms = Object.fromEntries(['uImage', 'uScale', 'uOffset', 'uTime', 'uWind', 'uSpeed', 'uCloudSpeed', 'uSnow', 'uWet'].map(key => [key, gl.getUniformLocation(program, key)]));
     gl.useProgram(program); gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
     const position = gl.getAttribLocation(program, 'aPosition');
@@ -131,6 +143,9 @@ export function LivingLandscape({ src, alt, disaster, day, paused = false, reduc
       gl.uniform1f(uniforms.uWind, effectiveReduced() ? 0 : profile.wind);
       gl.uniform1f(uniforms.uSpeed, profile.speed);
       gl.uniform1f(uniforms.uCloudSpeed, profile.cloudSpeed);
+      const weather=weatherVisuals(configuration.current.disaster,configuration.current.day);
+      gl.uniform1f(uniforms.uSnow,weather.snowCover);
+      gl.uniform1f(uniforms.uWet,weather.type==='tsunami'?weather.damage:weather.type==='tornado'?weather.strength*.4:0);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     };
     const tick = (now: number) => {
