@@ -3,22 +3,39 @@ import express from 'express';
 import { performance } from 'node:perf_hooks';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { actions, actionDescriptions, characters, demoDecisions, ids, validDecisions, type World, type Decisions, type Id } from '../src/engine.js';
+import { actions, actionDescriptions, characters, demoDecisions, ids, validDecisions, isWorld, type World, type Decisions, type Id } from '../src/engine.js';
 
 export const app = express();
 app.disable('x-powered-by');
-app.use(express.json({ limit: '100kb' }));
+app.use(express.json({ limit: '8mb' }));
 const model = process.env.NACE_MODEL || 'drex-v2.0';
 app.get('/api/status', (_req, res) => { res.json({ liveAvailable: Boolean(process.env.NACE_API_KEY), model }); });
-function validWorld(value: unknown): value is World {
+export function validWorld(value: unknown): value is World {
   if (!value || typeof value !== 'object') return false;
   const w = value as World;
-  return Number.isInteger(w.day) && w.day >= 0 && w.day <= 1000 && Array.isArray(w.history) && w.history.length <= 1000 && ids.every(id => w.people?.[id] && ['food', 'mood'].every(key => { const n = w.people[id][key as 'food' | 'mood']; return typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= 100; }) && ids.every(other => typeof w.trust?.[id]?.[other] === 'number' && Number.isFinite(w.trust[id][other]) && w.trust[id][other] >= 0 && w.trust[id][other] <= 100));
+  const resource = (n: unknown) => typeof n==='number' && Number.isFinite(n) && n>=0 && n<=1000000;
+  const bounded = (n: unknown) => resource(n) && (n as number)<=100;
+  return isWorld(value) && w.schemaVersion===2 && Number.isInteger(w.day) && w.day>=0 && w.day<=1000
+    && Array.isArray(w.history) && w.history.length===w.day
+    && !!w.town && resource(w.town.food) && resource(w.town.wealth)
+    && ['trust','mood','stability'].every(k=>bounded(w.town[k as 'trust'|'mood'|'stability']))
+    && typeof w.town.outcome==='string' && w.town.outcome.length<100 && typeof w.town.summary==='string' && w.town.summary.length<2000
+    && ids.every(id=>w.people?.[id] && resource(w.people[id].food) && resource(w.people[id].wealth) && bounded(w.people[id].mood)
+      && typeof w.people[id].role==='string' && w.people[id].role.length<200
+      && Array.isArray(w.people[id].traits) && w.people[id].traits.length<=20 && w.people[id].traits.every(t=>typeof t==='string'&&t.length<200)
+      && Array.isArray(w.people[id].recentActions) && w.people[id].recentActions.length<=10 && w.people[id].recentActions.every(a=>actions.includes(a))
+      && ids.every(other=>bounded(w.trust?.[id]?.[other])))
+    && (w.lastDecisions===null || validDecisions(w.lastDecisions))
+    && w.history.every(e=>e && Number.isInteger(e.day) && validDecisions(e.decisions) && Array.isArray(e.notes) && e.notes.every(n=>typeof n==='string') && !!e.civic && Array.isArray(e.effects));
 }
 export function makeDrexRequest(world: World) {
   return {
     model,
-    state: { setting: "Butterfly City, a tiny storybook town experiencing a food shortage. Bob has found the last pizza (8 food units) on day 0. Decide in character, not as an impartial planner. All four decisions are simultaneous. No one knows other residents' decisions this round. On later days each resident forages 2 food before acting. After actions everyone eats 1 food; hunger loses 12 mood, eating gains 4 mood. Food and mood range 0–100. Trust[a][b] means how much a trusts b. Share gives up to 3 food split equally among others. Trade is food for goodwill, not a food exchange. Personality, hunger, current trust and recent events must influence the choices.", characters, day: world.day, people: world.people, trust: world.trust, recentEvents: world.history.slice(-3), lastDecisions: world.lastDecisions },
+    state: {
+      setting: "Butterfly City is a miniature civilization after a food shortage. Bob starts with the last pizza (8 food). Decide in character, not as an impartial planner. All four actions are simultaneous against this SAME snapshot: do not assume another person's current choice. After day 0, each citizen forages 2 food before acting. Resource budgets are fixed before actions; gifts and income received this round cannot be spent again in the same round. Dinner costs 1 food each: +4 mood if fed, -12 if hungry. Trust[a][b] is a's trust toward b. Public pantry and treasury are distinct from private resources. After dinner on later days the treasury fairly grants up to one coin to each hungry citizen with less than one private coin, subject to funds; grants can only be spent next round. Evaluate each action using the exact action criteria. Personality traits, role, hunger, wealth, relationships, recent actions, and public stability should influence decisions. Civic outcomes are calculated AFTER the round by deterministic rules. Do not predict or replace those outcomes.",
+      characters, day:world.day, people:world.people, publicTown:world.town, trust:world.trust,
+      recentEvents:world.history.slice(-3), lastDecisions:world.lastDecisions,
+    },
     questions: Object.fromEntries(ids.map(id => [id, { type: 'choice', instructions: `What action will ${characters[id].name} take today? Personality: ${characters[id].personality} Choose the most plausible action given this resident's resources and relationships, even if selfish or irrational.`, criteria: actionDescriptions }])),
   };
 }
@@ -36,7 +53,7 @@ export function parseDrexResponse(data: unknown) {
 }
 app.post('/api/decide', async (req, res) => {
   const { world, mode } = req.body || {};
-  if (!validWorld(world) || !['demo', 'live'].includes(mode)) { res.status(400).json({ error: 'Invalid game state or mode.' }); return; }
+  if (!validWorld(world) || !['demo', 'live'].includes(mode)) { res.status(400).json({ error: 'Invalid civilization state or mode. Reload the game to migrate an older save.' }); return; }
   const started = performance.now();
   if (mode === 'demo') { res.json({ decisions: demoDecisions(world), source: 'demo', model: 'Local deterministic demo', latencyMs: Math.round(performance.now() - started), decisionsEvaluated: 4, probabilities: {} }); return; }
   if (!process.env.NACE_API_KEY) { res.status(503).json({ error: 'Live mode needs NACE_API_KEY in the server .env file. Add the key and restart the server, or select Demo Mode.' }); return; }
@@ -53,6 +70,12 @@ app.post('/api/decide', async (req, res) => {
     res.status(502).json({ error: message });
   }
 });
+const jsonErrorHandler: express.ErrorRequestHandler = (error, _req, res, next) => {
+  if(error?.type==='entity.too.large'){res.status(413).json({error:'This saved civilization is too large to process. Start a new story to continue.'});return;}
+  if(error?.type==='entity.parse.failed'){res.status(400).json({error:'The request contained invalid JSON.'});return;}
+  next(error);
+};
+app.use(jsonErrorHandler);
 app.use(express.static(resolve('dist')));
 app.use((req, res) => { if (req.path.startsWith('/api/')) res.status(404).json({ error: 'API route not found.' }); else res.sendFile(resolve('dist/index.html')); });
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
