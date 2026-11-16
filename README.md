@@ -2,6 +2,34 @@
 
 One decision. Two universes. A tiny interactive storybook civilization built with React, TypeScript, Vite, original painted art, and a Node/Express Drex proxy.
 
+[Play Butterfly City](https://butterfly-city-production.up.railway.app)
+
+![Two timelines after a tornado: Bob keeps supplies in one world and helps rebuild in the other, producing different trust, stability, and recovery.](docs/screenshots/divided-town-vs-suspicion-wave.png)
+
+*Same town. A different tomorrow. One changed decision creates two distinct social futures.*
+
+## Rewrite reality
+
+Rewind to Bob's pivotal decision and choose a different action. Everyone else keeps their original choice; then both worlds evolve independently.
+
+<p align="center">
+  <img src="docs/screenshots/rewrite-reality.png" alt="Rewrite reality: choose whether Bob shares supplies, trades, rebuilds, supports a neighbor, seeks aid, or spreads suspicion." width="560" />
+</p>
+
+## Weather the storm
+
+Tornadoes, tsunamis, and snowstorms disrupt the village. Shared resources, relationships, and funded repairs shape its recovery.
+
+![A tornado sweeps through Butterfly City as four citizens face an emergency and decide what to do with rescued supplies.](docs/screenshots/tornado-emergency.png)
+
+## Follow the ripple effect
+
+Compare both civilizations through their recorded choices, trust changes, cooperative actions, and funded repairs.
+
+![The complete ripple view compares two snowstorm recovery timelines, their civic outcomes, and the recorded consequences of Bob's original and alternate choices.](docs/screenshots/complete-ripple-effect.png)
+
+*These screenshots show the production game's deterministic Demo mode.*
+
 ## Painted-world presentation
 
 The visual remake uses an original cinematic hand-painted village and four matching painted villagers. The local art is inspired by warm, detailed Japanese animated films, with natural proportions, subtle movement, sunlight, drifting motes, and gently animated butterflies. No image-generation service is called at runtime.
